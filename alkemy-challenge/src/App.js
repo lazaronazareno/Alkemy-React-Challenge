@@ -1,12 +1,11 @@
-import React from 'react'
+import React from 'react';
+import api from './api';
 
 class App extends React.Component {
   state = {
     loading: true,
     error: null,
-    data:{
-      results: [],
-    }
+    data: []
   }
   componentDidMount() {
     this.fetchSuperHero()
@@ -14,11 +13,7 @@ class App extends React.Component {
   fetchSuperHero = async () => {
     this.setState ({loading: true, error:null})
     try{
-      const response = await fetch('https://superheroapi.com/api/4136848176351482/character-id/biography', {
-        'mode': `no-cors`,
-      });
-      const data = await response.json();
-  
+      const data = await api.id.biography();
       this.setState({
         loading: false,
         data: data,
@@ -32,26 +27,23 @@ class App extends React.Component {
   };
 
   render() {
-    if(this.state.error) {
-      return  `Error: ${this.state.error.message}`;
+    if( this.state.error) {
+      return `Error : ${this.state.error.message}`;
     }
     return (
       <div>
-        <ul>
-          {this.state.data.results.map(id => (
-            <li key={id.id}>
-              <h1>{id.name}</h1>
-            </li>
-          ))}
-        </ul>
-
-        {this.state.loading && (
-          <div>
-            <h1>cargando123</h1>
+        <h1>
+          {this.state.data.map( results => (
+            <div>
+              <h1>{results.biography.algnment}</h1>
             </div>
+          ))}
+        </h1>
+        {this.state.loading && (
+            <h1>cargando123</h1>
         )}
       </div>
-    )
+    );
   }
 }
 
