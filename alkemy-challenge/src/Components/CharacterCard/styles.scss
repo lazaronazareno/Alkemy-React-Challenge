@@ -1,0 +1,62 @@
+.mainDiv{
+    height: 30vh;
+    display: flex;
+    border: 2px solid grey;
+    border-radius: 10%;
+    background-color: black;
+}
+
+.cardDiv {
+    width: 15vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.image {
+    width: 50%;
+}
+
+.cardName {
+    color: red;
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.statsDiv{
+    width: 15vw;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.statsName{
+    color: red;
+    margin: 0;
+}
+
+.stats::-webkit-meter-bar{
+    background: none;
+    background-color: grey;
+    border: solid white 1px;
+    width: 12em;
+    height: 1em;
+    border-radius: none;
+}
+.stats::-webkit-meter-optimum-value, .stats::-webkit-meter-suboptimum-value, .stats::-webkit-meter-even-less-good-value{
+    background: none;
+    background-image: linear-gradient( 90deg, 
+                                     #641220 10%, 
+                                     #6E1423 20%, 
+                                     #85182A 30%,
+                                     #A11D33 40%,
+                                     #A71E34 50%,
+                                     #B21E35 60%,
+                                     #BD1F36 70%,
+                                     #C71F37 80%,
+                                    #DA1E37 90%,
+                                    #E01E37 100%);
+}

@@ -1,19 +1,24 @@
 import React from 'react';
 import api from './api';
+import CardComplete from './Components/CharacterCard/Card';
+import './App.scss';
 
 class App extends React.Component {
   state = {
     loading: true,
     error: null,
-    data: []
-  }
+    data: undefined
+  };
+
   componentDidMount() {
     this.fetchSuperHero()
-  }
+  };
+
   fetchSuperHero = async () => {
     this.setState ({loading: true, error:null})
     try{
-      const data = await api.id.biography();
+      const data = await api.id.heroesList();
+      console.log(data)
       this.setState({
         loading: false,
         data: data,
@@ -27,21 +32,17 @@ class App extends React.Component {
   };
 
   render() {
+    if (this.state.loading === true) {
+      return 'Cargando...';
+    }
     if( this.state.error) {
       return `Error : ${this.state.error.message}`;
     }
     return (
-      <div>
-        <h1>
-          {this.state.data.map( results => (
-            <div>
-              <h1>{results.biography.algnment}</h1>
-            </div>
-          ))}
-        </h1>
-        {this.state.loading && (
-            <h1>cargando123</h1>
-        )}
+      <div className="main">
+        { this.state.data.results.map(results =>(
+        <CardComplete heroes={results} key={results.id} />
+      ))}
       </div>
     );
   }
