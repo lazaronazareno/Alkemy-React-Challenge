@@ -1,18 +1,18 @@
-.mainDiv{
-    height: 30vh;
+.mainDiv {
+    width: 25vw;
     display: flex;
     border: 2px solid grey;
     border-radius: 10%;
     background-color: black;
+    flex-direction: column;
+    align-items: center;
 }
 
 .cardDiv {
-    width: 15vw;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
 }
 
 .image {
@@ -22,27 +22,16 @@
 .cardName {
     color: red;
     margin: 0;
-    font-size: 1.5em;
 }
 
-.statsDiv{
-    width: 15vw;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.statsName{
-    color: red;
-    margin: 0;
+.stats {
+    width: 20vw;
 }
 
 .stats::-webkit-meter-bar{
     background: none;
     background-color: grey;
     border: solid white 1px;
-    width: 12em;
     height: 1em;
     border-radius: none;
 }
@@ -57,6 +46,6 @@
                                      #B21E35 60%,
                                      #BD1F36 70%,
                                      #C71F37 80%,
-                                    #DA1E37 90%,
-                                    #E01E37 100%);
+                                     #DA1E37 90%,
+                                     #E01E37 100%);
 }
