@@ -39,7 +39,7 @@ const Login = props => {
         if(form.pass === true) {
             try{
               const data = await loginApi.login.accept();
-              props.history.push('/home');
+              props.history.push('/search');
               setValues({
                 loading: false,
                 data: data,

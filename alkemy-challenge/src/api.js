@@ -38,22 +38,30 @@ const api = {
         console.log(list);
         return callApi(`/search/all`);
     },
+
     randomHero() {
       let min = 0;
       let max = 732;
       return callApi(`/${randomNumber(min,max)}`);
     },
+
+    search(heroId) {
+      return callApi(`/search/${heroId}`);
+    },
+
     image() {
       let min = 0;
       let max = 732;
       return callApi(`/${randomNumber(min,max)}/image`);
     },
+
     update(id, updates) {
       return callApi(`/${id}`, {
         method: 'PUT',
         body: JSON.stringify(updates),
       });
     },
+
     // Lo hubiera llamado `delete`, pero `delete` es un keyword en JavaScript asi que no es buena idea :P
     remove(id) {
       return callApi(`/${id}`, {
