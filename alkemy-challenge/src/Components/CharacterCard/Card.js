@@ -1,7 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './styles.scss';
 
 class CardComplete extends React.Component {
+  state = {
+    heroId : this.props.heroes.id,
+  }
     render() {
       return (
           <div className="mainDiv">
@@ -21,6 +25,7 @@ class CardComplete extends React.Component {
             <meter className="stats" min="0" max="100" high="75" low="25" optimum="100" value={this.props.heroes.powerstats.power}>power</meter>
               <span className="cardName">Combat : {this.props.heroes.powerstats.combat}</span>
             <meter className="stats" min="0" max="100" high="75" low="25" optimum="100" value={this.props.heroes.powerstats.combat}>combat</meter>
+            <Link to="/Details" id={this.state.heroId}>+ Detalles</Link>
           </div>
         </div>
       );

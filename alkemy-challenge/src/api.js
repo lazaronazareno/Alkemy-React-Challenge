@@ -46,6 +46,7 @@ const api = {
     },
 
     search(heroId) {
+      console.log(heroId);
       return callApi(`/search/${heroId}`);
     },
 

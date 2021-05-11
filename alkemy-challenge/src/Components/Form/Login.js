@@ -3,13 +3,14 @@ import loginApi from '../../loginApi';
 import './formStyles.scss';
 
 
-const Login = props => {
+function Login (props) {
     const [form, setValues] = useState({
         email: '',
         password: '',
         pass: false,
         loading:false,
         error:null,
+        token: '',
       });
 
     const validate = {
@@ -21,6 +22,7 @@ const Login = props => {
         if (form){
             if(form.email === validate.email && form.password === validate.password){
                 setValues({
+                  ...form,
                     pass: true})
             }
         }
@@ -38,15 +40,18 @@ const Login = props => {
         setValues ({loading: true, error:null})
         if(form.pass === true) {
             try{
-              const data = await loginApi.login.accept();
+              const data = await loginApi.login.accept(form);
               props.history.push('/search');
+              console.log(data.token)
               setValues({
+                ...form,
                 loading: false,
                 data: data,
+                token: data.token
               });
             } catch (error){
-              console.log(form.error)
               setValues({
+                ...form,
                 loading: false,
                 error: error,
               });
