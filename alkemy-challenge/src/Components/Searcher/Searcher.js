@@ -18,12 +18,13 @@ function Searcher (props) {
           [event.target.name]: event.target.value
         });
       };
-    
+
+      
       let handleSubmit = async event => {
         event.preventDefault();
         setValues ({loading: true, error:null})
             try{
-              const data = await api.id.search(form.search);
+              const data = await api.superhero.search(form.search);
               console.log(data)
               setValues({
                 ...form,
@@ -42,8 +43,8 @@ function Searcher (props) {
     };
 
   return (
-    <> {
-      !form.error &&(
+    <>
+     {!form.error &&(
         <section className="login__container">
           <h2>Buscar Heroe</h2>
           <form className="login__container--form" onSubmit={handleSubmit}>
@@ -60,7 +61,7 @@ function Searcher (props) {
           </form>
           { form.data && (
             form.data.results.map((hero) => (
-              <CardComplete heroes={hero} key={hero.id}/>
+                <CardComplete heroes={hero} key={hero.id}/>
             )))
           }
           {form.loading && (
@@ -69,8 +70,7 @@ function Searcher (props) {
 
         </section>
         
-      )
-    }
+      )}
           {form.error && (
             <>
               <h1>Error : {form.error} </h1>

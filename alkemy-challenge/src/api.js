@@ -10,14 +10,8 @@ const randomNumber = (min = 0, max = 1) =>
     await simulateNetworkLatency();
     
     options.headers = {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-    'Origin': 'http://localhost:3000',
-    'Access-Control-Allow-Origin' : 'http://localhost:3000',
-    'Access-Control-Allow-Credentials' : true,
-    'Access-Control-Allow-Methods' : ('OPTIONS', 'GET', 'POST'),
-    'Access-Control-Allow-Headers' : ('Origin', 'Content-Type', 'Accept'),
-    'Access-Control-Max-Age': '86400'
+      'Access-Control-Allow-Origin' : 'http://localhost:3000',
+      'Origin' : 'http://localhost:3000',
   };
   
   const url = BASE_URL + endpoint;
@@ -28,17 +22,7 @@ const randomNumber = (min = 0, max = 1) =>
 }
 
 const api = {
-  id: {
-    heroesList() {
-      let list = [];
-        for(let i = 1 ; i < 21 ; i++){
-          console.log(i);
-          list.push(i);
-        }
-        console.log(list);
-        return callApi(`/search/all`);
-    },
-
+  superhero: {
     randomHero() {
       let min = 0;
       let max = 732;
@@ -48,26 +32,6 @@ const api = {
     search(heroId) {
       console.log(heroId);
       return callApi(`/search/${heroId}`);
-    },
-
-    image() {
-      let min = 0;
-      let max = 732;
-      return callApi(`/${randomNumber(min,max)}/image`);
-    },
-
-    update(id, updates) {
-      return callApi(`/${id}`, {
-        method: 'PUT',
-        body: JSON.stringify(updates),
-      });
-    },
-
-    // Lo hubiera llamado `delete`, pero `delete` es un keyword en JavaScript asi que no es buena idea :P
-    remove(id) {
-      return callApi(`/${id}`, {
-        method: 'DELETE',
-      });
     },
   },
 };

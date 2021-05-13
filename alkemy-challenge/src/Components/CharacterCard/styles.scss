@@ -49,3 +49,28 @@
                                      #DA1E37 90%,
                                      #E01E37 100%);
 }
+
+.details {
+    color: white;
+}
+
+.open {
+    color: white;
+    background-color: red;
+    content: "More Details";
+    &:hover {
+      background-color: white;
+      color: black;  
+    }
+}
+
+.close {
+    background-color: black;
+    color: white;
+    content: "X";
+    &:hover {
+        background-color: red;
+        color: black;
+    }
+    
+}

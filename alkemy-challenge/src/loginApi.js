@@ -12,12 +12,7 @@ const randomNumber = (min = 0, max = 1) =>
     options.headers = {
     'Content-Type': 'application/json',
     Accept: 'application/json',
-    'Origin': 'http://localhost:3000',
-    'Access-Control-Allow-Origin' : 'http://localhost:3000',
-    'Access-Control-Allow-Credentials' : true,
-    'Access-Control-Allow-Methods' : ('OPTIONS', 'GET', 'POST'),
-    'Access-Control-Allow-Headers' : ('Origin', 'Content-Type', 'Accept'),
-    'Access-Control-Max-Age': '86400'
+    'Referer': 'http://localhost:3000',
   };
   
   const url = BASE_URL + endpoint;
