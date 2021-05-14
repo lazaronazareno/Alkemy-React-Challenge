@@ -1,15 +1,20 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import api from '../../api';
 import CardComplete from "../CharacterCard/Card";
 
+
 function Searcher (props) {
+  const history = useHistory();
     const [form, setValues] = useState({
         search: '',
         loading:false,
         error:null,
         data:undefined,
         token: props.history,
+        superheroes:{},
+        superheroesId : {},
+        item:[]
       });
     
       let handleInput = event => {
@@ -41,9 +46,33 @@ function Searcher (props) {
               });
             };
     };
+    let addHero = (props) => {
+      setValues({
+        ...form,
+        superheroes:form.data.results,
+        superheroesId:form.data.results[0].id,
+      })
+      console.log(form.superheroes)
+      console.log(form.superheroesId)
+      console.log(props.target.id)
+    }
 
   return (
     <>
+      <div> 
+        {form.superheroes &&(
+          <>
+            <h1>My Team</h1>
+            { form.superheroes.results.map((hero) => (
+              <>
+                <CardComplete heroes={hero} key={hero.id}/>
+                <button onClick={addHero}>Remover del team</button>
+              </>
+            ))
+          }
+          </>
+        )}
+      </div>
      {!form.error &&(
         <section className="login__container">
           <h2>Buscar Heroe</h2>
@@ -61,7 +90,11 @@ function Searcher (props) {
           </form>
           { form.data && (
             form.data.results.map((hero) => (
+              <>
                 <CardComplete heroes={hero} key={hero.id}/>
+                <button onClick={addHero} id={hero.id}>Agregar al team</button>
+                <button onClick={addHero}>Remover del team</button>
+              </>
             )))
           }
           {form.loading && (
@@ -74,7 +107,7 @@ function Searcher (props) {
           {form.error && (
             <>
               <h1>Error : {form.error} </h1>
-              <Link to="/">Volver</Link>
+              <Link onClick={history.goBack}>Volver</Link>
             </>
           )}
     </>

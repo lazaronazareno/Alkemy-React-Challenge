@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './styles.scss';
 
 class CardComplete extends React.Component {
@@ -16,7 +15,7 @@ class CardComplete extends React.Component {
   }
     render() {
       return (
-          <div className="mainDiv" onClick={this.handleDialog}>
+          <div className="mainDiv">
             <div className="cardDiv">
               <img className="image" src={this.props.heroes.image.url} alt={this.props.heroes.id} />
               <h1 className="cardName">{this.props.heroes.name}</h1>
@@ -33,27 +32,31 @@ class CardComplete extends React.Component {
             <meter className="stats" min="0" max="100" high="75" low="25" optimum="100" value={this.props.heroes.powerstats.power}>power</meter>
               <span className="cardName">Combat : {this.props.heroes.powerstats.combat}</span>
             <meter className="stats" min="0" max="100" high="75" low="25" optimum="100" value={this.props.heroes.powerstats.combat}>combat</meter>
-            <button className={`open ${this.state.showDialog ? "open" : "close"}`} onClick={this.handleDialog} />
+            <button className={`button ${this.state.showDialog ? "" : "buttonClose"}`} onClick={this.handleDialog} >
+              <div className={`bar1 ${this.state.showDialog ? "barchanged1" : ""}`}></div>
+              <div className={`bar2 ${this.state.showDialog ? "barchanged2" : ""}`}></div>
+              <div className={`bar3 ${this.state.showDialog ? "barchanged3" : ""}`}></div>
+            </button>
           </div>
           {this.state.showDialog && (
             <div className="details">
               <h1>Biography</h1>
-              <h2>Full Name : {this.props.heroes.biography["full-name"]}</h2>
-              <h2>Alter Ego : {this.props.heroes.biography["alter-ego"]}</h2>
-              <h2>Aliases : {this.props.heroes.biography.aliases[0]} / {this.props.heroes.biography.aliases[1]}</h2>
-              <h2>Place of Birth : {this.props.heroes.biography["place-of-birth"]}</h2>
-              <h2>First appearance : {this.props.heroes.biography["first-appearance"]}</h2>
-              <h2>Alignment : {this.props.heroes.biography.alignment}</h2>
+              <span>Full Name : {this.props.heroes.biography["full-name"]}</span><br/>
+              <span>Alter Ego : {this.props.heroes.biography["alter-ego"]}</span><br/>
+              <span>Aliases : {this.props.heroes.biography.aliases[0]} / {this.props.heroes.biography.aliases[1]}</span><br/>
+              <span>Place of Birth : {this.props.heroes.biography["place-of-birth"]}</span><br/>
+              <span>First appearance : {this.props.heroes.biography["first-appearance"]}</span><br/>
+              <span>Alignment : {this.props.heroes.biography.alignment}</span><br/>
               <h1>Appearance</h1>
-              <h2>Gender : {this.props.heroes.appearance.gender}</h2>
-              <h2>Race : {this.props.heroes.appearance.race}</h2>
-              <h2>Height : {this.props.heroes.appearance.height[1]}</h2>
-              <h2>Weight : {this.props.heroes.appearance.weight[1]}</h2>
-              <h2>Eye Color: {this.props.heroes.appearance["eye-color"]}</h2>
-              <h2>Hair Color: {this.props.heroes.appearance["hair-color"]}</h2>
+              <span>Gender : {this.props.heroes.appearance.gender}</span><br/>
+              <span>Race : {this.props.heroes.appearance.race}</span><br/>
+              <span>Height : {this.props.heroes.appearance.height[1]}</span><br/>
+              <span>Weight : {this.props.heroes.appearance.weight[1]}</span><br/>
+              <span>Eye Color: {this.props.heroes.appearance["eye-color"]}</span><br/>
+              <span>Hair Color: {this.props.heroes.appearance["hair-color"]}</span><br/>
               <h1>Work</h1>
-              <h2>Occupation: {this.props.heroes.work.occupation}</h2>
-              <h2>Base of Operation: {this.props.heroes.work.base}</h2>
+              <span>Occupation: {this.props.heroes.work.occupation}</span><br/>
+              <span>Base of Operation: {this.props.heroes.work.base}</span><br/>
             </div>
           )}
         </div>

@@ -1,11 +1,10 @@
 .mainDiv {
-    width: 25vw;
     display: flex;
     border: 2px solid grey;
-    border-radius: 10%;
+    border-radius: 5%;
     background-color: black;
-    flex-direction: column;
     align-items: center;
+    overflow: hidden;
 }
 
 .cardDiv {
@@ -13,6 +12,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
 }
 
 .image {
@@ -20,7 +20,7 @@
 }
 
 .cardName {
-    color: red;
+    color: #E01E37;
     margin: 0;
 }
 
@@ -54,23 +54,45 @@
     color: white;
 }
 
-.open {
-    color: white;
-    background-color: red;
-    content: "More Details";
-    &:hover {
-      background-color: white;
-      color: black;  
-    }
-}
+.button {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 10vh;
+    height: 6vh;
+    background-color: inherit;
+    border: none;
+    align-items: center;
+    z-index: 1;
+    position: absolute;
+    align-self: flex-end;
+  }
+  
+  .buttonClose {
+    cursor: pointer;
+    display: flex;
+    background-color: inherit;
+    z-index: 1;
+  }
 
-.close {
-    background-color: black;
-    color: white;
-    content: "X";
-    &:hover {
-        background-color: red;
-        color: black;
-    }
-    
-}
+.bar1, .bar2, .bar3 {
+    width: 5vh;
+    height: 1vh;
+    border-radius: 1vh;
+    background-color: #E01E37;
+  }
+  
+  .barchanged1 {
+    transform: rotate(-45deg) translate(-0.5vh, 0.5vh);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .barchanged2 {
+    display: none;
+  }
+  
+  .barchanged3 {
+    transform: rotate(45deg) translate(-1vh, -1vh);
+    transition: transform 0.3s ease-in-out;
+  }
