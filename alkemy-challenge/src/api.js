@@ -11,6 +11,7 @@ const randomNumber = (min = 0, max = 1) =>
     
     options.headers = {
       'Access-Control-Allow-Origin' : 'http://localhost:3000',
+      'Content-Type': 'application/json',
       'Origin' : 'http://localhost:3000',
   };
   
@@ -23,14 +24,11 @@ const randomNumber = (min = 0, max = 1) =>
 
 const api = {
   superhero: {
-    randomHero() {
-      let min = 0;
-      let max = 732;
-      return callApi(`/${randomNumber(min,max)}`);
+    addHero(id) {
+      return callApi(`/${id}`);
     },
 
     search(heroId) {
-      console.log(heroId);
       return callApi(`/search/${heroId}`);
     },
   },

@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import { Link, useHistory } from 'react-router-dom';
 import api from '../../api';
 import CardComplete from "../CharacterCard/Card";
 
 
 function Searcher (props) {
-  const history = useHistory();
     const [form, setValues] = useState({
         search: '',
         loading:false,
+        loading2:false,
         error:null,
+        error2:null,
         data:undefined,
-        token: props.history,
-        superheroes:{},
-        superheroesId : {},
-        item:[]
+        token: props.location.state,
+        superheroes: undefined,
+        superheroesId : [],
+        ids:[],
       });
     
       let handleInput = event => {
@@ -30,7 +30,6 @@ function Searcher (props) {
         setValues ({loading: true, error:null})
             try{
               const data = await api.superhero.search(form.search);
-              console.log(data)
               setValues({
                 ...form,
                 loading: false,
@@ -46,37 +45,49 @@ function Searcher (props) {
               });
             };
     };
-    let addHero = (props) => {
-      setValues({
-        ...form,
-        superheroes:form.data.results,
-        superheroesId:form.data.results[0].id,
+
+
+   let getHeroes = (props) => {
+      setValues({...form, loading: true, error:null, superheroesId:form.superheroesId.push(props.target.id)});
+      console.log(form.superheroesId);
+      const promises = [];
+      form.superheroesId.forEach((id) => {
+        promises.push(api.superhero.addHero(id));
+        console.log(promises)
       })
-      console.log(form.superheroes)
-      console.log(form.superheroesId)
-      console.log(props.target.id)
+
+      Promise.all(promises).then((responses)=> {
+        const ids = responses.map((response) => response);
+        console.log(responses.results)
+        console.log(responses)
+        console.log(ids)
+        setValues({...form, ids:ids});
+        console.log(ids)
+      })
     }
+    
 
   return (
     <>
       <div> 
-        {form.superheroes &&(
+        {form.superheroesId &&(
           <>
             <h1>My Team</h1>
-            { form.superheroes.results.map((hero) => (
-              <>
-                <CardComplete heroes={hero} key={hero.id}/>
-                <button onClick={addHero}>Remover del team</button>
-              </>
-            ))
-          }
+            {
+              form.ids.map((teamHeroes) => (
+                <>
+                  <CardComplete heroes={teamHeroes} key={teamHeroes.id}/>
+                  <button>Remover del team</button>
+                </>
+              ))
+            }
           </>
         )}
       </div>
      {!form.error &&(
-        <section className="login__container">
+        <div className="form">
           <h2>Buscar Heroe</h2>
-          <form className="login__container--form" onSubmit={handleSubmit}>
+          <form className="form" onSubmit={handleSubmit}>
             <input
               name="search"
               className="input"
@@ -92,24 +103,21 @@ function Searcher (props) {
             form.data.results.map((hero) => (
               <>
                 <CardComplete heroes={hero} key={hero.id}/>
-                <button onClick={addHero} id={hero.id}>Agregar al team</button>
-                <button onClick={addHero}>Remover del team</button>
+                <button onClick={getHeroes} id={hero.id}>Agregar al team</button>
               </>
             )))
           }
           {form.loading && (
             <h1>Cargando</h1>
           )}
-
-        </section>
-        
+        </div>
       )}
-          {form.error && (
-            <>
-              <h1>Error : {form.error} </h1>
-              <Link onClick={history.goBack}>Volver</Link>
-            </>
-          )}
+      {form.error && (
+        <div>
+          <h1>Error : {form.error} </h1>
+          <button>regresar</button>
+        </div>
+      )}
     </>
   );
 }
