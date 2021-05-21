@@ -24,10 +24,10 @@ const randomNumber = (min = 0, max = 1) =>
 
 const loginApi = {
   login: {
-    accept(form) {
+    accept(email, password) {
         return callApi(`/`, {
           method: 'POST',
-          body: JSON.stringify(form),
+          body: JSON.stringify(email, password),
         });
       },
   },
