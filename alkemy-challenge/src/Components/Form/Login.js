@@ -34,6 +34,7 @@ function Login (props) {
         }else {
           document.getElementById("form").reset(); 
           setValues({
+            ...form,
             loading: false,
             error: data.error,
           });

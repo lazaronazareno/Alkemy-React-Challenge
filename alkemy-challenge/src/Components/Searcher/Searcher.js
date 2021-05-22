@@ -15,7 +15,8 @@ function Searcher (props) {
       ids:[],
       powerStats:[],
       show:false,
-      maxPowerStat:''
+      maxPowerStat:'',
+      alignmentError:''
     });
     
       let handleInput = event => {
@@ -48,14 +49,35 @@ function Searcher (props) {
        let getHeroes = (props) => {
           setValues({...form, loading: true, superheroesId:form.superheroesId.push(props.target.id)});
           const promises = [];
-          form.superheroesId.forEach((id) => {
-            promises.push(api.superhero.addHero(id));
-          });
+            form.superheroesId.forEach((id) => {
+              promises.push(api.superhero.addHero(id));
+            });
           Promise.all(promises).then((responses)=> {
             const ids = responses.map((response) => response);
-            setValues({...form, loading:false, ids:ids, show:true});
+            setValues({...form, loading:false, ids:ids, show:false});
           });
         }
+
+        let goodOrBad = () => {
+          let alignment = form.ids.map((alignment) => alignment.biography.alignment)
+        }
+
+        let maxLength = (props) => {
+          let good = 'good';
+          let bad = 'bad';
+          let alignment = form.ids.map((alignment) => alignment.biography.alignment)
+          let maxAlignmentGood = alignment.filter((str) => str === good);
+          let maxAlignmentBad = alignment.filter((str) => str === bad);
+          if (form.ids.length <=5 && maxAlignmentGood.length <= 2 && maxAlignmentBad.length <= 3) {
+              getHeroes(props)
+              goodOrBad()
+          } else {
+            setValues({
+              ...form,
+              alignmentError: 'You already have 3 members of the same alignment'
+            })
+          }
+        } 
 
         let removeHeroes =(props) => {
           let deleteItem = form.ids.map(i => i.id).indexOf(props.target.id)
@@ -65,14 +87,59 @@ function Searcher (props) {
         }
     
         let handleError = () => {
-          console.log(form)
           setValues({...form, error:null, data:undefined});
+        }
+
+        let compareMax = (max, sumAttributes) => {
+          let index = form.powerStats.indexOf(max)
+            if (index === 0) {
+              setValues({
+                ...form,
+                powerStats: sumAttributes,
+                maxPowerStat:'intelligence'
+              })
+            } else if (index === 1) {
+              setValues({
+                ...form,
+                powerStats: sumAttributes,
+                maxPowerStat:'Strength',
+              })
+            } else if (index === 2) {
+              setValues({
+                ...form,
+                powerStats: sumAttributes,
+                maxPowerStat:'Speed',
+              })
+            }else if (index === 3) {
+              setValues({
+                ...form,
+                powerStats: sumAttributes,
+                maxPowerStat:'Durability',
+              })
+            } else if (index === 4) {
+              setValues({
+                ...form,
+                powerStats: sumAttributes,
+                maxPowerStat:'Power',
+              })
+            } else if (index === 5) {
+              setValues({
+                ...form,
+                powerStats: sumAttributes,
+                maxPowerStat:'Combat',
+              })
+             } else {
+                setValues({
+                  ...form,
+                  powerStats: sumAttributes,
+                  maxPowerStat:'',
+                })
+            }
         }
 
         let sumPowerstats = () => {
           let powerStatsList = form.ids.map((pStats) => pStats.powerstats)
           let attributesList = powerStatsList.map(atr => atr)
-          console.log(attributesList)
           let attributesSumIntelligence = attributesList.reduce((total, currentValue) => 
           total + parseInt(currentValue.intelligence),0);
           let attributesSumStrength = attributesList.reduce((total, currentValue) => 
@@ -87,55 +154,22 @@ function Searcher (props) {
           total + parseInt(currentValue.combat),0);
           let sumAttributes = []
           sumAttributes.push(attributesSumIntelligence,attributesSumStrength, attributesSumSpeed, attributesSumDurability, attributesSumPower, attributesSumCombat)
-
           let max = Math.max(...sumAttributes)
-          if(max>0) {
-            if (max === attributesSumIntelligence) {
-              setValues({
-                ...form,
-                powerStats: sumAttributes,
-                maxPowerStat:'intelligence,'
-              })
-            } if (max === attributesSumStrength) {
-              setValues({
-                ...form,
-                powerStats: sumAttributes,
-                maxPowerStat:'Strength',
-              })
-            } if (max === attributesSumSpeed) {
-              setValues({
-                ...form,
-                powerStats: sumAttributes,
-                maxPowerStat:'Speed',
-              })
-            } if (max === attributesSumDurability) {
-              setValues({
-                ...form,
-                powerStats: sumAttributes,
-                maxPowerStat:'Durability',
-              })
-            } if (max === attributesSumCombat) {
-              setValues({
-                ...form,
-                powerStats: sumAttributes,
-                maxPowerStat:'Combat',
-              })
-            } else {
-                setValues({
-                  ...form,
-                  powerStats: sumAttributes,
-                  maxPowerStat:'Power',
-                })
-            }
-          }
-          console.log(max)
-          console.log(form.maxPowerStat)
-          console.log(form.powerStats)
+          compareMax(max, sumAttributes)
+        }
+
+        let onClick = () => {
+          sumPowerstats();
+          setValues({
+            ...form,
+            show:true
+          })
         }
 
         useEffect(() => {
           const timer = setTimeout(() => {
             sumPowerstats()
+            goodOrBad()
           }, 1000);
           return () => clearTimeout(timer);
         }, [form.ids])
@@ -146,7 +180,7 @@ function Searcher (props) {
         {form.superheroesId &&(
           <>
             <h1>My Team</h1>
-            <h2>Type : {form.maxPowerStat}</h2>
+            <h2 className={`cardDiv1 ${form.show ? "cardDiv2" : ""}`} >Type : {form.maxPowerStat}</h2>
             {
               form.ids.map((teamHeroes) => (
                 <>
@@ -159,7 +193,10 @@ function Searcher (props) {
               ))
               
             }
-            <button onClick={sumPowerstats}>Calculate Total PowerStats</button>
+            { form.alignmentError && (
+              <h2>{form.alignmentError}</h2>
+            )}
+            <button onClick={onClick}>Calculate Total PowerStats</button>
             { form.powerStats && (
                 <div className={`cardDiv1 ${form.show ? "cardDiv2" : ""}`}>
                   <h1>Total PowerStats</h1>
@@ -223,11 +260,10 @@ function Searcher (props) {
                    value={form.powerStats[5]}
                    >Combat
                 </meter>
-                <span>{form.ids.appearence.height[1]}</span>
-                <span>{form.ids.appearence.weight[1]}</span>
               </div>
               )
             }
+
           </>
         )}
      {!form.error &&(
@@ -249,7 +285,7 @@ function Searcher (props) {
             form.data.results.map((hero) => (
               <>
                 <CardComplete heroes={hero} key={hero.id}/>
-                <button onClick={getHeroes} id={hero.id}>Agregar al team</button>
+                <button onClick={maxLength} id={hero.id}>Agregar al team</button>
               </>
             )))
           }
