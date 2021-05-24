@@ -10,8 +10,7 @@ const randomNumber = (min = 0, max = 1) =>
     await simulateNetworkLatency();
     
     options.headers = {
-      'Access-Control-Allow-Origin' : 'http://localhost:3000',
-      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin' : '*',
       'Origin' : 'http://localhost:3000',
   };
   

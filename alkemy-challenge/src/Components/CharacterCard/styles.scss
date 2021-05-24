@@ -5,27 +5,30 @@
     background-color: black;
     align-items: center;
     overflow: hidden;
+    width: 15vw;
 }
 
-.cardDiv, .cardDiv1 {
+.cardDiv {
     height: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     overflow: hidden;
 }
 
-.cardDiv1 {
-  height: auto;
-  display: none;
-}
-
-.cardDiv2 {
+.cardDivChanged {
   display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .image {
+  display: flex;
     width: 50%;
+    height: 100%;
+}
+
+.imageChanged, .statsClose {
+  display: none;
 }
 
 .cardName {
@@ -33,8 +36,22 @@
     margin: 0;
 }
 
+.statsDivGeneral {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+
+.statsDiv1, .statsDiv2 {
+  display: flex;
+  flex-direction: column;
+}
+
 .stats {
-    width: 20vw;
+    width: 5vw;
 }
 
 .stats::-webkit-meter-bar{
@@ -60,7 +77,14 @@
 }
 
 .details {
-    color: white;
+    color: #E01E37;
+    background-color: inherit;
+    font-size: small;
+    overflow: hidden;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+    
 }
 
 .button {
@@ -68,25 +92,25 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    width: 10vh;
-    height: 6vh;
+    width: 7vh;
+    height: 5vh;
     background-color: inherit;
     border: none;
     align-items: center;
-    z-index: 1;
+    z-index: 2;
     position: absolute;
-    align-self: flex-end;
+    align-self: flex-start;
   }
   
   .buttonClose {
     cursor: pointer;
     display: flex;
     background-color: inherit;
-    z-index: 1;
+    z-index: 2;
   }
 
 .bar1, .bar2, .bar3 {
-    width: 5vh;
+    width: 4vh;
     height: 1vh;
     border-radius: 1vh;
     background-color: #E01E37;

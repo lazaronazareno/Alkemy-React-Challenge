@@ -1,0 +1,50 @@
+.myTeamDiv, .searcherDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.myTeamCharacterCard, .searchedCharacter, .myTeamCharacters {
+    display: flex;
+}
+
+.searchedDiv {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+}
+
+.cardDiv1 {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    display: none;
+}
+
+.cardDiv2 {
+  display: flex;
+  align-items: center;
+}
+
+.removeButton, .addButton {
+    display: flex;
+    position: absolute;
+    align-self: flex-end;
+    background-color: black;
+    color: #E01E37;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #E01E37;
+    border-radius: 50%;
+    font-weight: 900;
+    width: 7vh;
+    height: 5vh;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #E01E37;
+        color: black;
+        border: 2px solid grey;
+    }
+}
