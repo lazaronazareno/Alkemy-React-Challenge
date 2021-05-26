@@ -5,7 +5,7 @@
     background-color: black;
     align-items: center;
     overflow: hidden;
-    width: 15vw;
+    width: 20vw;
 }
 
 .cardDiv {
@@ -33,7 +33,14 @@
 
 .cardName {
     color: #E01E37;
+    font-family: 'Bebas Neue', cursive;
     margin: 0;
+    font-weight: 100;
+}
+
+span {
+  font-family: 'Bebas Neue', cursive;
+  font-weight: 100;
 }
 
 .statsDivGeneral {

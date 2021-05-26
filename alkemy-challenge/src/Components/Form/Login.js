@@ -49,34 +49,36 @@ function Login (props) {
 
 
   return (
-        <section className="form">
-          <h2>Login</h2>
-          <form className="form" id="form" onSubmit={handleSubmit}>
+    <div className="loginGeneralDiv">
+        <section className="loginDiv">
+          <h1 className="loginTittle">SuperHeroes Page Login</h1>
+          <form className="loginForm" id="form" onSubmit={handleSubmit}>
             <input
               name="email"
-              className="input"
+              className="inputLogin"
               type="text"
               placeholder="Email"
               onChange={handleInput}
             />
             <input
               name="password"
-              className="input"
+              className="inputLogin"
               type="password"
               placeholder="Password"
               onChange={handleInput}
             />
-            <button type="submit" token={form.token} >
+            <button className="loginButton" type="submit" token={form.token} >
                   Login
             </button>
           </form>
         {form.loading && (
-            <h1>Cargando</h1>
+            <h1 className="loginText">Cargando</h1>
           )}
           {form.error && (
-            <h1>{form.error}</h1>
+            <h1 className="loginText">{form.error}</h1>
           )}
         </section>
+      </div>
   );
 }
 

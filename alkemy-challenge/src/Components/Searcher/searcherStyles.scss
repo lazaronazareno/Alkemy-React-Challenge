@@ -1,17 +1,66 @@
-.myTeamDiv, .searcherDiv {
+.generalDiv {
+    height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
 }
 
-.myTeamCharacterCard, .searchedCharacter, .myTeamCharacters {
+.myTeamDiv, .searcherDiv, .errorDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: orange;
+    border-radius: 5%;
+    box-shadow: 0px 0px 25px 25px rgba(0,0,0,0.9);
+
+}
+
+.myTeamCharacterCard, .searchedCharacter {
     display: flex;
 }
 
-.searchedDiv {
+.searchedDiv, .myTeamCharacters {
     display: flex;
     flex-flow: wrap;
-    justify-content: center;
+    justify-content: space-evenly;
+    width: 67vw;
+}
+
+.searcherTittle {
+    font-family: 'Bebas Neue', cursive;
+    font-size: xx-large;
+    padding: 0.5vw;
+    border:2px solid;
+    margin: 10px;
+}
+
+.searchInput {
+    font-family: 'Bebas Neue', cursive;
+    font-size: xx-large;
+    height: 7vh;
+    z-index: 1;
+    margin-bottom: 5px;
+}
+
+.searchButtons {
+    font-family: 'Bebas Neue', cursive;
+    font-size: xx-large;
+	text-shadow:-1px 0px 7px #ffffff;
+    background:linear-gradient(to bottom, #323ee9 5%, #2a28b8 100%);
+	background-color:#2a28b8;
+	border-radius:10px;
+	border:2px solid #201dc2;
+	cursor:pointer;
+	text-decoration:none;
+
+    &:hover{
+        background:linear-gradient(to bottom, #2a28b8 5%, #212bb8 100%);
+	    background-color:#4049ce;
+    }
+}
+
+.searchText {
+    font-family: 'Bebas Neue', cursive;
+    font-size: x-large;
 }
 
 .cardDiv1 {
@@ -25,26 +74,4 @@
 .cardDiv2 {
   display: flex;
   align-items: center;
-}
-
-.removeButton, .addButton {
-    display: flex;
-    position: absolute;
-    align-self: flex-end;
-    background-color: black;
-    color: #E01E37;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #E01E37;
-    border-radius: 50%;
-    font-weight: 900;
-    width: 7vh;
-    height: 5vh;
-    cursor: pointer;
-
-    &:hover {
-        background-color: #E01E37;
-        color: black;
-        border: 2px solid grey;
-    }
 }
