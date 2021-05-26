@@ -62,7 +62,7 @@ function Searcher (props) {
             });
           Promise.all(promises).then((responses)=> {
             const superheroes = responses.map((response) => response);
-            setValues({...form, loading:false, superheroes:superheroes, showPowerstats:false, showAverageHW:false, showButton:false, alignmentError: 'confirmed'});
+            setValues({...form, loading:false, superheroes:superheroes, showPowerstats:false, showAverageHW:false, showButton:false, alignmentError: ''});
           });
         };
 
@@ -72,14 +72,12 @@ function Searcher (props) {
           let alignment = form.superheroes.map((alignment) => alignment.biography.alignment);
           let maxAlignmentGood = alignment.filter((str) => str === good);
           let maxAlignmentBad = alignment.filter((str) => str === bad);
-          console.log(maxAlignmentBad)
-          console.log(maxAlignmentGood)
           if (form.superheroes.length < 6) {
             if(maxAlignmentGood.length <3 || maxAlignmentBad.length <3) {
               getHeroes(props);
               setValues({
                 ...form,
-                alignmentError: 'Add Character loading'
+                alignmentError: 'Loading'
               });
             }
           } else {
@@ -183,7 +181,8 @@ function Searcher (props) {
           let weightsTotal = weightTotal.map((weightsProm) => weightsProm.weight[1]);
           let weightTotalSum = weightsTotal.reduce((total, currentValue) => 
           (parseInt(total) + parseInt(currentValue)));
-          let weightsAverage = weightTotalSum / weightsTotal.length;
+          let weightTotalLength = weightsTotal.length
+          let weightsAverage = weightTotalSum / weightTotalLength;
 
           setValues({
             ...form,
@@ -198,7 +197,6 @@ function Searcher (props) {
           setValues({
             ...form,
             showPowerstats:true,
-            alignmentError: 'Add Character loading',
           });
         };
 
@@ -212,7 +210,7 @@ function Searcher (props) {
 
 
   return (
-    <div className="generalDiv">
+    <div className={`generalDiv ${form.superheroes.length !==0 ? "generalDivChange" : ""}`}>
       <>
         {form.superheroes.length !== 0 &&(
           <div className="myTeamDiv">
@@ -246,8 +244,8 @@ function Searcher (props) {
             )}
             {form.heightAverage && form.weightAverage && (
               <div className={`cardDiv1 ${form.showAverageHW ? "cardDiv2" : ""}`}>
-                <span>Average Height : {form.heightAverage} Cms</span>
-                <span>Average Weight : {form.weightAverage} Kgs</span>
+                <span>"Average Height : {form.heightAverage} Cms." </span>
+                <span> "Average Weight : {form.weightAverage} Kgs." </span>
               </div>
             )}
 
@@ -257,7 +255,7 @@ function Searcher (props) {
      {!form.error &&(
         <div className="searcherDiv">
           <h2 className="searcherTittle">Search Heroes</h2>
-          <form onSubmit={handleSubmit}>
+          <form className="searcherForm" onSubmit={handleSubmit}>
             <input
               name="search"
               className="searchInput"
@@ -268,6 +266,9 @@ function Searcher (props) {
             <button className="searchButtons" type="submit" >
               Search
             </button>
+            {form.loading && (
+            <h1 className="searchText">Loading</h1>
+          )}
           </form>
           <div className="searchedDiv">
           { form.data && (
@@ -279,9 +280,6 @@ function Searcher (props) {
               </div>
             )))
           }
-          {form.loading && (
-            <h1 className="searchText">Loading</h1>
-          )}
           </div>
         </div>
       )}
