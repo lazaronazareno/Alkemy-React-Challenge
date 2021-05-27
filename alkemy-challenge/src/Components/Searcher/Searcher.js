@@ -76,27 +76,28 @@ function Searcher (props) {
           let maxAlignmentGood = alignment.filter((str) => str === good);
           let maxAlignmentBad = alignment.filter((str) => str === bad);
           if (form.superheroes.length < 6) {
-            if(maxAlignmentGood.length <3) {
+            if((maxAlignmentGood.length <=2) && (maxAlignmentBad.length <=2) ) {
               getHeroes(props);
               setValues({
                 ...form,
-                alignmentError: 'Adding Hero:good'
+                alignmentError: 'Adding Character'
               });
-            } else if (maxAlignmentGood === 3) {
-              setValues({
-                ...form,
-                alignmentError: 'You already have 3 members of the same alignment "good"'
-              });
-            } else if (maxAlignmentBad.length <3) {
+            } else if (maxAlignmentGood.length === 3 && maxAlignmentBad.length <3) {
               getHeroes(props);
               setValues({
                 ...form,
-                alignmentError: 'Adding hero:bad'
+                alignmentError: 'You already have 3 members of the same alignment "good", Adding "bad'
+              });
+            } else if ((maxAlignmentBad.length === 3 ) && (maxAlignmentGood.length <3)) {
+              getHeroes(props);
+              setValues({
+                ...form,
+                alignmentError: 'You already have 3 members of the same alignment "bad", Adding "good'
               });
             } else {
               setValues({
                 ...form,
-                alignmentError: 'You already have 3 members of the same alignment "bad"'
+                alignmentError: 'Error : You already have 3 members of the same alignment! Remove the "extra" character.'
               });
             }
           } else {

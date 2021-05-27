@@ -1,4 +1,4 @@
-const BASE_URL = 'https://www.superheroapi.com/api/4136848176351482';
+const BASE_URL = 'https://hosted-cors.herokuapp.com/https://www.superheroapi.com/api/4136848176351482';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const randomNumber = (min = 0, max = 1) =>
