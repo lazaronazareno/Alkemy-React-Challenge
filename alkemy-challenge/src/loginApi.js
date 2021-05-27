@@ -1,4 +1,4 @@
-const BASE_URL = 'http://challenge-react.alkemy.org';
+const BASE_URL = 'https://hosted-cors.herokuapp.com/http://challenge-react.alkemy.org';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const randomNumber = (min = 0, max = 1) =>
