@@ -1,5 +1,6 @@
 .generalDiv {
-    height: 100vh;
+    height: 100%;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -90,4 +91,13 @@
 .cardDiv2 {
   display: flex;
   align-items: center;
+}
+
+@media (max-width: 860px) {
+    .generalDivChange {
+        height: max-content;
+    }
+    .searchedDiv, .myTeamCharacters {
+        flex-direction: column;
+    }
 }

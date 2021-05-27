@@ -136,3 +136,17 @@ span {
     transform: rotate(45deg) translate(-1vh, -1vh);
     transition: transform 0.3s ease-in-out;
   }
+
+  @media (max-width: 860px) {
+    .mainDiv {
+      width: 100%;
+    }
+    .stats{
+      width: auto;
+    }
+
+    .powerStatsDiv {
+      display: flex;
+      flex-direction: column;
+    }
+  }

@@ -2,7 +2,7 @@ import React from 'react'
 
 function PowerStats(props) {
     return (
-        <div>
+        <div className="powerStatsDiv">
                 <span className="cardName">Intelligence : {props.powerStats[0]}</span>
                 <meter className="stats" 
                   min="0" 

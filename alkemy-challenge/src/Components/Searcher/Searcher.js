@@ -44,6 +44,9 @@ function Searcher (props) {
                 loading: false,
                 data: data,
                 error: data.error,
+                showPowerstats:false,
+                showAverageHW:false,
+                showButton:false,
               });
             } catch (error) {
               setValues({
@@ -73,17 +76,33 @@ function Searcher (props) {
           let maxAlignmentGood = alignment.filter((str) => str === good);
           let maxAlignmentBad = alignment.filter((str) => str === bad);
           if (form.superheroes.length < 6) {
-            if(maxAlignmentGood.length <3 || maxAlignmentBad.length <3) {
+            if(maxAlignmentGood.length <3) {
               getHeroes(props);
               setValues({
                 ...form,
-                alignmentError: 'Loading'
+                alignmentError: 'Adding Hero:good'
+              });
+            } else if (maxAlignmentGood === 3) {
+              setValues({
+                ...form,
+                alignmentError: 'You already have 3 members of the same alignment "good"'
+              });
+            } else if (maxAlignmentBad.length <3) {
+              getHeroes(props);
+              setValues({
+                ...form,
+                alignmentError: 'Adding hero:bad'
+              });
+            } else {
+              setValues({
+                ...form,
+                alignmentError: 'You already have 3 members of the same alignment "bad"'
               });
             }
           } else {
             setValues({
               ...form,
-              alignmentError: 'You already have 3 members of the same alignment or your team is full :('
+              alignmentError: 'Your team is full'
             });
           }
         };
