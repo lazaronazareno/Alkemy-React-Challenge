@@ -6,6 +6,7 @@ import './searcherStyles.scss';
 import trash from '../../Assets/trash.svg';
 import add from '../../Assets/add.svg';
 import PowerStats from "../CharacterCard/powerStats";
+import { Link } from "react-router-dom";
 
 function Searcher (props) {
   const [form, setValues] = useState({
@@ -273,7 +274,7 @@ function Searcher (props) {
         )}
         </>
      {!form.error &&(
-        <div className="searcherDiv">
+        <div className={`${form.token ? "searcherDiv" : "cardDiv1"}`}>
           <h2 className="searcherTittle">Search Heroes</h2>
           <form className="searcherForm" onSubmit={handleSubmit}>
             <input
@@ -307,6 +308,12 @@ function Searcher (props) {
         <div className="errorDiv">
           <h1 className="searchText">Error : {form.error} </h1>
           <button className="searchButtons" onClick={handleError}>Back</button>
+        </div>
+      )}
+      {!form.token && (
+        <div className="errorDiv">
+          <h1 className="searchText">Looks like you are trying to access without the password... Go back and login to access to this page!</h1>
+          <Link className="searchButtons" to="/">Go back to Login</Link>
         </div>
       )}
     </div>
