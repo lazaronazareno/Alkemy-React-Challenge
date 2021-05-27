@@ -15,6 +15,7 @@
     padding: 1vw;
     border:2px solid;
     text-align: center;
+    margin: 20px;
 }
 
 .loginDiv {
@@ -66,4 +67,11 @@
 .loginText {
     font-family: 'Bebas Neue', cursive;
     font-size: x-large;
+    text-align: center;
+}
+
+@media (max-width: 860px) {
+    .loginText {
+        font-size: larger;
+    }
 }
