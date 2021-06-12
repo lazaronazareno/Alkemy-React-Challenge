@@ -49,33 +49,43 @@ function Login (props) {
 
 
   return (
-    <div className="loginGeneralDiv">
-        <section className="loginDiv">
-          <h1 className="loginTittle">SuperHeroes Page Login</h1>
-          <form className="loginForm" id="form" onSubmit={handleSubmit}>
-            <input
-              name="email"
-              className="inputLogin"
-              type="text"
-              placeholder="Email"
-              onChange={handleInput}
-            />
-            <input
-              name="password"
-              className="inputLogin"
-              type="password"
-              placeholder="Password"
-              onChange={handleInput}
-            />
-            <button className="loginButton" type="submit" token={form.token} >
+    <div className="container-fluid bg-danger bg-gradient loginGeneralDiv">
+        <section className="card mb-3 text-dark bg-warning p-4">
+          <h1 className="card-title p-3 border border-3 border-dark">SuperHeroes Page Login</h1>
+          <form className="d-flex flex-column" id="form" onSubmit={handleSubmit}>
+            <div className="form-floating mb-3">
+                <input
+                  name="email"
+                  id="floatingInput"
+                  className="form-control form-control-lg"
+                  type="text"
+                  placeholder="Email"
+                  onChange={handleInput}
+                />
+                <label for="floatingInput">Email : </label>
+            </div>
+            <div className="form-floating mb-3">
+                <input
+                  name="password"
+                  id="floatingPassword"
+                  className="form-control form-control-lg"
+                  type="password"
+                  placeholder="Password"
+                  onChange={handleInput}
+                />
+                <label for="floatingPassword">Password : </label>
+            </div>
+            <button className="btn btn-primary btn-lg" type="submit" token={form.token} >
                   Login
             </button>
           </form>
         {form.loading && (
-            <h1 className="loginText">Cargando</h1>
+          <div className="d-flex justify-content-center">
+            <div className="spinner-border" role="status" />
+          </div>
           )}
           {form.error && (
-            <h1 className="loginText">{form.error}</h1>
+            <h1>{form.error}</h1>
           )}
         </section>
       </div>

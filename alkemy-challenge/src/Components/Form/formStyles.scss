@@ -1,77 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto&display=swap');
 
-.loginGeneralDiv {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: red;
-}
-
-.loginTittle {
+.container-fluid {
     font-family: 'Bebas Neue', cursive;
-    font-size: xxx-large;
-    padding: 1vw;
-    border:2px solid;
-    text-align: center;
-    margin: 20px;
 }
 
-.loginDiv {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: orange;
-    border-radius: 10%;
+.card {
     box-shadow: 0px 0px 25px 25px rgba(0,0,0,0.9);
-    width: 60vw;
-    height: 60vh;
-}
-
-.loginForm {
-    display: flex;
-    flex-direction: column;
-    border-radius: 5%;
-    width: 50%;
-    height: 50%;
-    text-align-last: center;
-}
-
-.inputLogin {
-    font-family: 'Bebas Neue', cursive;
-    font-size: xx-large;
-    height: 7vh;
-    z-index: 1;
-}
-
-.loginButton {
-    font-family: 'Bebas Neue', cursive;
-    font-size: xx-large;
-    box-shadow: 0px 0px 40px 5px #201dc2;
-	text-shadow:-1px 0px 7px #ffffff;
-    background:linear-gradient(to bottom, #323ee9 5%, #2a28b8 100%);
-	background-color:#2a28b8;
-	border-radius:10px;
-	border:2px solid #201dc2;
-	cursor:pointer;
-	text-decoration:none;
-
-    &:hover{
-        background:linear-gradient(to bottom, #2a28b8 5%, #212bb8 100%);
-	    background-color:#4049ce;
-    }
-}
-
-.loginText {
-    font-family: 'Bebas Neue', cursive;
-    font-size: x-large;
-    text-align: center;
-}
-
-@media (max-width: 860px) {
-    .loginText {
-        font-size: larger;
-    }
 }

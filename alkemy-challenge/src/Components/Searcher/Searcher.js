@@ -231,11 +231,11 @@ function Searcher (props) {
 
 
   return (
-    <div className={`generalDiv ${form.superheroes.length !==0 ? "generalDivChange" : ""}`}>
+    <div className="container-fluid bg-danger bg-gradient">
       <>
         {form.superheroes.length !== 0 &&(
-          <div className="myTeamDiv">
-            <h1 className="searcherTittle">My Team</h1>
+          <div className="card mb-3 text-dark bg-warning p-4 align-items-center">
+            <h1 className="card-title p-3 border border-3 border-dark">My Team</h1>
             <h2 className={`cardDiv1 ${form.showPowerstats ? "cardDiv2" : ""}`} >Type : {form.maxPowerStat}</h2>
             <div className="myTeamCharacters">
             {
@@ -274,31 +274,35 @@ function Searcher (props) {
         )}
         </>
      {!form.error &&(
-        <div className={`${form.token ? "searcherDiv" : "cardDiv1"}`}>
-          <h2 className="searcherTittle">Search Heroes</h2>
-          <form className="searcherForm" onSubmit={handleSubmit}>
-            <input
-              name="search"
-              className="searchInput"
-              type="text"
-              placeholder="Search Hero"
-              onChange={handleInput}
-            />
-            <button className="searchButtons" type="submit" >
-              Search
+        <div className="card mb-3 text-dark bg-warning p-4 align-items-center">
+          <h2 className="card-title p-3 border border-3 border-dark">Search Heroes</h2>
+          <form className="d-flex flex-column align-items-center" onSubmit={handleSubmit}>
+            <div className="form-floating mb-3">
+                <input
+                  name="search"
+                  id="floatingInput"
+                  className="form-control form-control-lg"
+                  type="text"
+                  onChange={handleInput}
+                />
+                <label for="floatingInput">Character Name : </label>
+            </div>
+            <button className="btn btn-primary btn-lg" type="submit" >
+                Search
             </button>
             {form.loading && (
-            <h1 className="searchText">Loading</h1>
+            <div className="d-flex justify-content-center m-3">
+                <div className="spinner-border" role="status" />
+            </div>
           )}
           </form>
-          <div className="searchedDiv">
+          <div className="container d-flex justify-content-evenly p-3">
           { form.data && (
             form.data.results.map((hero) => (
-              <div className="searchedCharacter">
+              <>
                 <CardComplete heroes={hero} key={hero.id}/>
                 <GeneralButton onClick={maxLength} id={hero.id} image={add} />
-
-              </div>
+              </>
             )))
           }
           </div>
