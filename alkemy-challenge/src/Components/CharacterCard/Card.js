@@ -35,10 +35,7 @@ class CardComplete extends React.Component {
                   <meter className="stats" min="0" max="100" high="75" low="25" optimum="100" value={this.props.heroes.powerstats.combat}>combat</meter>
                 </div>
             </div>
-            <button className={`button ${this.state.showDialog ? "" : "buttonClose"}`} onClick={this.handleDialog} >
-              <div className={`bar1 ${this.state.showDialog ? "barchanged1" : ""}`}></div>
-              <div className={`bar2 ${this.state.showDialog ? "barchanged2" : ""}`}></div>
-              <div className={`bar3 ${this.state.showDialog ? "barchanged3" : ""}`}></div>
+            <button type="button" className={`btn btn-danger ${this.state.showDialog ? "" : "buttonClose"}`} onClick={this.handleDialog} >
             </button>
           </div>
           {this.state.showDialog && (
