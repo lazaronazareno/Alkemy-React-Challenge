@@ -49,7 +49,7 @@ function Login (props) {
 
 
   return (
-    <div className="container-fluid bg-danger bg-gradient loginGeneralDiv">
+    <div className="container-fluid d-flex justify-content-center">
         <section className="card mb-3 text-dark bg-warning p-4">
           <h1 className="card-title p-3 border border-3 border-dark">SuperHeroes Page Login</h1>
           <form className="d-flex flex-column" id="form" onSubmit={handleSubmit}>
@@ -80,9 +80,9 @@ function Login (props) {
             </button>
           </form>
         {form.loading && (
-          <div className="d-flex justify-content-center">
-            <div className="spinner-border" role="status" />
-          </div>
+           <div className="d-flex justify-content-center m-3">
+              <div className="spinner-border" role="status" />
+           </div>
           )}
           {form.error && (
             <h1>{form.error}</h1>

@@ -8,7 +8,7 @@ import Searcher from './Components/Searcher/Searcher';
 class App extends React.Component {
   render() {
     return (
-      <>
+      <div className="App bg-danger">
         <BrowserRouter>
          <Switch>
            <Route exact path="/" component={Login} />
@@ -16,7 +16,7 @@ class App extends React.Component {
            <Route component={NotFound} />
          </Switch>
        </BrowserRouter>
-      </>
+      </div>
     );
   }
 }

@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from '../../api';
-import GeneralButton from "../Buttons/button";
 import CardComplete from "../CharacterCard/Card";
 import './searcherStyles.scss';
-import trash from '../../Assets/trash.svg';
-import add from '../../Assets/add.svg';
 import PowerStats from "../CharacterCard/powerStats";
 import { Link } from "react-router-dom";
 
@@ -71,6 +68,7 @@ function Searcher (props) {
         };
 
         let maxLength = (props) => {
+          console.log(props)
           let good = 'good';
           let bad = 'bad';
           let alignment = form.superheroes.map((alignment) => alignment.biography.alignment);
@@ -231,52 +229,57 @@ function Searcher (props) {
 
 
   return (
-    <div className="container-fluid bg-danger bg-gradient">
+    <div className="container-fluid d-flex justify-content-center align-items-center h-100">
       <>
         {form.superheroes.length !== 0 &&(
-          <div className="card mb-3 text-dark bg-warning p-4 align-items-center">
-            <h1 className="card-title p-3 border border-3 border-dark">My Team</h1>
-            <h2 className={`cardDiv1 ${form.showPowerstats ? "cardDiv2" : ""}`} >Type : {form.maxPowerStat}</h2>
-            <div className="myTeamCharacters">
+          <div className="card mb-3 text-dark bg-warning p-4 m-2 w-50 h-75">
+            <h2 className="card-title p-3 border border-3 border-dark">My Team</h2>
+            <h3>Type : {form.maxPowerStat}</h3>
+            <div className="container d-flex flex-wrap justify-content-evenly p-3 overflow">
             {
               form.superheroes.map((teamHeroes) => (
-                <div className="myTeamCharacterCard">
+                <div className="d-flex position-relative col-md-3">
                   <CardComplete
                    heroes={teamHeroes} 
                    key={teamHeroes.id}
                    />
-                  <GeneralButton onClick={removeHeroes} id={teamHeroes.id} image={trash} />
+                  <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={teamHeroes.id} onClick={removeHeroes}> Quit
+                  </button>
                 </div>
               )) 
             }
             </div>
             { form.powerStats[0] !== 0 && (
               <>
-              <button className="searchButtons" disabled={form.showButton} onClick={onClick}>Calculate Total PowerStats</button>
-                <div className={`cardDiv1 ${form.showPowerstats ? "cardDiv2" : ""}`}>
+                <button className="btn btn-primary btn-sm mb-1" disabled={form.showButton} onClick={onClick} >
+                  Calcule Total PowerStats
+                </button>
+                <div className={`container d-flex ${form.showPowerstats ? "" : "d-none"}`}>
                   <PowerStats powerStats={form.powerStats} superheroes={form.superheroes} />
-              </div>
-              <button className="searchButtons" disabled={form.showButton} onClick={getHeightWeight}>Calculate Total Height and Weight</button>
+                </div>
+                <button className="btn btn-primary btn-sm mb-3" disabled={form.showButton} onClick={getHeightWeight} >
+                  Calcule Total Height and Weight
+                </button>
               </>
               )
             }
             { form.alignmentError && (
-              <h2 className="searchText">{form.alignmentError}</h2>
+              <h3>{form.alignmentError}</h3>
             )}
             {form.heightAverage && form.weightAverage && (
-              <div className={`cardDiv1 ${form.showAverageHW ? "cardDiv2" : ""}`}>
+              <>
                 <span>"Average Height : {form.heightAverage} Cms." </span>
                 <span> "Average Weight : {form.weightAverage} Kgs." </span>
-              </div>
+              </>
             )}
 
           </div>
         )}
         </>
      {!form.error &&(
-        <div className="card mb-3 text-dark bg-warning p-4 align-items-center">
-          <h2 className="card-title p-3 border border-3 border-dark">Search Heroes</h2>
-          <form className="d-flex flex-column align-items-center" onSubmit={handleSubmit}>
+        <div className={`card mb-3 text-dark bg-warning p-4 m-2 w-50 ${form.data ? "h-75" : ""}`}>
+          <form className="d-flex flex-column" onSubmit={handleSubmit}>
+            <h2 className="card-title p-3 border border-3 border-dark">Search Heroes</h2>
             <div className="form-floating mb-3">
                 <input
                   name="search"
@@ -287,37 +290,43 @@ function Searcher (props) {
                 />
                 <label for="floatingInput">Character Name : </label>
             </div>
-            <button className="btn btn-primary btn-lg" type="submit" >
+            <button className="btn btn-primary btn-lg mb-3" type="submit" >
                 Search
             </button>
             {form.loading && (
-            <div className="d-flex justify-content-center m-3">
-                <div className="spinner-border" role="status" />
-            </div>
-          )}
+              <div className="d-flex justify-content-center m-3">
+                  <div className="spinner-border" role="status" />
+              </div>
+            )}
           </form>
-          <div className="container d-flex justify-content-evenly p-3">
           { form.data && (
-            form.data.results.map((hero) => (
-              <>
-                <CardComplete heroes={hero} key={hero.id}/>
-                <GeneralButton onClick={maxLength} id={hero.id} image={add} />
-              </>
-            )))
+            <div className="container-fluid d-flex flex-wrap justify-content-evenly overflow">
+              {
+                form.data.results.map((hero) => (
+                  <div className="d-flex position-relative col-md-3">
+                    <CardComplete heroes={hero} key={hero.id}/>
+                    <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={hero.id} onClick={maxLength}> Add
+                    </button>
+                  </div>
+                ))
+              }
+            </div>
+            )
           }
           </div>
-        </div>
       )}
       {form.error && (
-        <div className="errorDiv">
-          <h1 className="searchText">Error : {form.error} </h1>
-          <button className="searchButtons" onClick={handleError}>Back</button>
+        <div className="card mb-3 text-dark bg-warning p-4 m-2 w-50 h-75">
+          <h2>Error : {form.error} </h2>
+          <button className="btn btn-primary btn-lg mb-3" onClick={handleError}>
+            Back
+          </button>
         </div>
       )}
       {!form.token && (
-        <div className="errorDiv">
-          <h1 className="searchText">Looks like you are trying to access without the password... Go back and login to access to this page!</h1>
-          <Link className="searchButtons" to="/">Go back to Login</Link>
+        <div className="card mb-3 text-dark bg-warning p-4 m-2 w-50 h-75">
+          <h2>Looks like you are trying to access without the password... Go back and login to access to this page!</h2>
+          <Link className="btn btn-primary btn-lg mb-3" to="/">Go back to Login</Link>
         </div>
       )}
     </div>

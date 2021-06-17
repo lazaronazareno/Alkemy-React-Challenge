@@ -1,7 +1,9 @@
-.main {
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto&display=swap');
+
+.App {
+  font-family: 'Bebas Neue', cursive;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: max-content;
-  background-color: red;
+  height: 100vh;
 }
