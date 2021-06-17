@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
 import loginApi from '../../loginApi';
 import './formStyles.scss';
 
 
-function Login (props) {
+function Login ({ setToken }) {
     const [form, setValues] = useState({
         email: '',
         password: '',
         loading:false,
         error:null,
-        token: '',
       });
     
       const handleInput = event => {
@@ -22,30 +22,30 @@ function Login (props) {
       const handleSubmit = async event => {
         event.preventDefault();
         setValues ({loading: true, error:null})
-        const data = await loginApi.login.accept(form);
-        console.log(data)
+        const token = await loginApi.login.accept(form);
+        setToken(token);
         setValues({
           loading: false,
-          token: data.token,
-          error: data.error
+          error: token.error
         });
-        if (data.token){
-          props.history.push('/search',data.token);
-        }else {
+        if (token.error){
           document.getElementById("form").reset(); 
           setValues({
             ...form,
             loading: false,
-            error: data.error,
+            error: token.error,
           });
-        };
+        }
       };
 
     useEffect(() => {
+      if(form.error) {
+        return;
+      }
       return () => {
         setValues({loading:false})
       }
-    }, [])
+    }, [form.error])
 
 
   return (
@@ -62,7 +62,7 @@ function Login (props) {
                   placeholder="Email"
                   onChange={handleInput}
                 />
-                <label for="floatingInput">Email : </label>
+                <label htmlFor="floatingInput">Email : </label>
             </div>
             <div className="form-floating mb-3">
                 <input
@@ -73,9 +73,9 @@ function Login (props) {
                   placeholder="Password"
                   onChange={handleInput}
                 />
-                <label for="floatingPassword">Password : </label>
+                <label htmlFor="floatingPassword">Password : </label>
             </div>
-            <button className="btn btn-primary btn-lg" type="submit" token={form.token} >
+            <button className="btn btn-primary btn-lg" type="submit">
                   Login
             </button>
           </form>
@@ -91,5 +91,9 @@ function Login (props) {
       </div>
   );
 }
+
+Login.propTypes = {
+  setToken: PropTypes.func.isRequired
+};
 
 export default Login;

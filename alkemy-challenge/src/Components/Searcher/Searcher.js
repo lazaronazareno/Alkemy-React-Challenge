@@ -3,15 +3,13 @@ import api from '../../api';
 import CardComplete from "../CharacterCard/Card";
 import './searcherStyles.scss';
 import PowerStats from "../CharacterCard/powerStats";
-import { Link } from "react-router-dom";
 
-function Searcher (props) {
+function Searcher () {
   const [form, setValues] = useState({
       search: '',
       loading:false,
       error:null,
       data:undefined,
-      token: props.location.state,
       superheroesId : [],
       superheroes:[],
       powerStats:[],
@@ -251,13 +249,13 @@ function Searcher (props) {
             </div>
             { form.powerStats[0] !== 0 && (
               <>
-                <button className="btn btn-primary btn-sm mb-1" disabled={form.showButton} onClick={onClick} >
+                <button className="btn btn-primary btn-sm mb-1" data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onClick={onClick} >
                   Calcule Total PowerStats
                 </button>
-                <div className={`container d-flex ${form.showPowerstats ? "" : "d-none"}`}>
+                <div className="collapse" id="collapseExample">
                   <PowerStats powerStats={form.powerStats} superheroes={form.superheroes} />
                 </div>
-                <button className="btn btn-primary btn-sm mb-3" disabled={form.showButton} onClick={getHeightWeight} >
+                <button className="btn btn-primary btn-sm mb-3"data-bs-toggle="collapse" href="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2" onClick={getHeightWeight} >
                   Calcule Total Height and Weight
                 </button>
               </>
@@ -267,10 +265,10 @@ function Searcher (props) {
               <h3>{form.alignmentError}</h3>
             )}
             {form.heightAverage && form.weightAverage && (
-              <>
+              <div className="collapse" id="collapseExample2">
                 <span>"Average Height : {form.heightAverage} Cms." </span>
                 <span> "Average Weight : {form.weightAverage} Kgs." </span>
-              </>
+              </div>
             )}
 
           </div>
@@ -288,7 +286,7 @@ function Searcher (props) {
                   type="text"
                   onChange={handleInput}
                 />
-                <label for="floatingInput">Character Name : </label>
+                <label htmlFor="floatingInput">Character Name : </label>
             </div>
             <button className="btn btn-primary btn-lg mb-3" type="submit" >
                 Search
@@ -321,12 +319,6 @@ function Searcher (props) {
           <button className="btn btn-primary btn-lg mb-3" onClick={handleError}>
             Back
           </button>
-        </div>
-      )}
-      {!form.token && (
-        <div className="card mb-3 text-dark bg-warning p-4 m-2 w-50 h-75">
-          <h2>Looks like you are trying to access without the password... Go back and login to access to this page!</h2>
-          <Link className="btn btn-primary btn-lg mb-3" to="/">Go back to Login</Link>
         </div>
       )}
     </div>
