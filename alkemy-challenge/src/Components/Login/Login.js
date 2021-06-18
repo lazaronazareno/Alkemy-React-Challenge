@@ -43,9 +43,9 @@ function Login ({ setToken }) {
         return;
       }
       return () => {
-        setValues({loading:false})
+        setValues({...form,loading:false})
       }
-    }, [form.error])
+    }, [])
 
 
   return (
