@@ -1,10 +1,23 @@
 import React, { useEffect, useState } from "react";
+import { connect } from 'react-redux';
+import { addTeamMember, deleteTeamMember } from '../../Actions';
 import api from '../../api';
 import CardComplete from "../CharacterCard/Card";
 import './searcherStyles.scss';
 import PowerStats from "../CharacterCard/powerStats";
 
-function Searcher () {
+const Searcher = (props) => {
+  const { myTeamList, searcherList, memberId } = props;
+
+  const handleAddTeamMember = (memberId) => {
+    props.addTeamMember({ memberId });
+    getHeroes(myTeamList)
+    }
+
+  const handleDeleteMember = (memberId) => {
+    props.deleteTeamMember(memberId)
+  }
+
   const [form, setValues] = useState({
       search: '',
       loading:false,
@@ -56,7 +69,7 @@ function Searcher () {
        let getHeroes = (props) => {
           setValues({...form, loading: true, superheroesId:form.superheroesId.push(props.target.id)});
           const promises = [];
-            form.superheroesId.forEach((id) => {
+            myTeamList.forEach((id) => {
               promises.push(api.superhero.addHero(id));
             });
           Promise.all(promises).then((responses)=> {
@@ -302,7 +315,7 @@ function Searcher () {
                 form.data.results.map((hero) => (
                   <div className="d-flex position-relative col-md-3">
                     <CardComplete heroes={hero} key={hero.id}/>
-                    <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={hero.id} onClick={maxLength}> Add
+                    <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={hero.id} onClick={() => handleAddTeamMember(hero.id)}> Add
                     </button>
                   </div>
                 ))
@@ -324,4 +337,18 @@ function Searcher () {
   );
 }
 
-export default Searcher;
+const mapStateToProps = state => {
+  return {
+    myTeamList: state.myTeamList,
+    searcherList: state.searcherList,
+    memberId : state.memberId,
+    team : state.team,
+  }
+}
+
+const mapDispatchToProps = {
+    addTeamMember,
+    deleteTeamMember,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Searcher);

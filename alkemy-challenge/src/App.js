@@ -10,7 +10,6 @@ import useToken from './useToken';
 
 function App() {
   const { token, setToken } = useToken();
-  const { list, setList } = useState();
     return (
       <>
       { !token && (
@@ -26,10 +25,10 @@ function App() {
             <Layout>
               <Switch>
                 <Route exact path={["/", "/search"]}>
-                  <Searcher setList={setList}/>
+                  <Searcher/>
                 </Route>
                 <Route exact path="/team">
-                  <MyTeam list={list}/>
+                  <MyTeam/>
                 </Route>
                 <Route component={NotFound}/>
               </Switch>

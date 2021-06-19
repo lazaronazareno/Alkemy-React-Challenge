@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { connect } from 'react-redux';
+import { getMyTeam } from '../../Actions';
 import CardComplete from "../CharacterCard/Card";
 import PowerStats from "../CharacterCard/powerStats";
 
-function MyTeam () {
+const MyTeam = (props) => {
+  const { myTeamList, team } = props;
+
+  const handlerGetMyTeam = () => {
+    props.getMyTeam()
+    }
+
   const [form, setValues] = useState({
       search: '',
       loading:false,
@@ -141,7 +149,8 @@ function MyTeam () {
     <div className="container-fluid d-flex justify-content-center align-items-center h-100">
       <>
       <h2 className="card-title p-3 border border-3 border-dark">My Team</h2>
-        {form.superheroes.length !== 0 &&(
+      <button className="btn btn-primary" onClick={handlerGetMyTeam}> get heroes</button>
+        {props.myTeamList &&(
           <div className="card mb-3 text-dark bg-warning p-4 m-2 w-50 h-75">
             <h3>Type : {form.maxPowerStat}</h3>
             <div className="container d-flex flex-wrap justify-content-evenly p-3 overflow">
@@ -189,4 +198,17 @@ function MyTeam () {
   );
 }
 
-export default MyTeam;
+const mapStateToProps = state => {
+  return {
+    myTeamList: state.myTeamList,
+    searcherList: state.searcherList,
+    memberId : state.memberId,
+    team : state.team,
+  }
+}
+
+const mapDispatchToProps = {
+  getMyTeam,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyTeam);
