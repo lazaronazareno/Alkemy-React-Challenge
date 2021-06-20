@@ -18,7 +18,7 @@ class CardComplete extends React.Component {
           <div className="container d-flex flex-column border border-light border-2 rounded-2 bg-dark align-items-center justify-content-evenly overflow-hidden">
             <div className={`${this.state.showDialog ? "d-none" : "d-flex flex-column align-items-center "}`}>
               <img className={`${this.state.showDialog ? "d-none" : "float-start w-50"}`} src={this.props.heroes.image.url} alt={this.props.heroes.id} />
-              <h1 className="cardtitle text-danger">{this.props.heroes.name}</h1>
+              <h1 className="cardtitle text-danger m-0">{this.props.heroes.name}</h1>
               <span className="text-wrap text-danger">Intelligence: {this.props.heroes.powerstats.intelligence}</span>
               <meter className="stats" min="0" max="100" high="75" low="25" optimum="100" value={this.props.heroes.powerstats.intelligence}>intelligence</meter>
               <span className="text-wrap text-danger">Strength: {this.props.heroes.powerstats.strength}</span>
@@ -31,9 +31,9 @@ class CardComplete extends React.Component {
               <meter className="stats" min="0" max="100" high="75" low="25" optimum="100" value={this.props.heroes.powerstats.power}>power</meter>
               <span className="text-wrap text-danger">Combat: {this.props.heroes.powerstats.combat}</span>
               <meter className="stats" min="0" max="100" high="75" low="25" optimum="100" value={this.props.heroes.powerstats.combat}>combat</meter>
-              <button type="button" className="btn btn-danger" onClick={this.handleDialog}> About
+              <button type="button" className="btn btn-danger position-absolute top-0 end-0 m-1" onClick={this.handleDialog}> About
               </button>
-          </div>
+            </div>
           {this.state.showDialog && (
             <div className="details">
               <h2 className="text-wrap text-danger">Biography</h2>
@@ -53,7 +53,7 @@ class CardComplete extends React.Component {
               <h2 className="text-wrap text-danger">Work</h2>
               <span className="text-wrap text-danger">Occupation: {this.props.heroes.work.occupation}</span><br/>
               <span className="text-wrap text-danger">Base of Operation: {this.props.heroes.work.base}</span><br/>
-              <button type="button" className="btn btn-danger" onClick={this.handleDialog}> Close
+              <button type="button" className="btn btn-danger position-absolute top-0 end-0 m-1" onClick={this.handleDialog}> Close
             </button>
             </div>
           )}

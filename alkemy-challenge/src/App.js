@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './App.scss';
 import Layout from './Components/Layout';

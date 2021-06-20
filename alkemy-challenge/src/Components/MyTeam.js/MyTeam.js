@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { connect } from 'react-redux';
-import { getMyTeam } from '../../Actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteTeamMember, fetchMyTeam } from '../../redux/reducers';
+import api from '../../api';
 import CardComplete from "../CharacterCard/Card";
 import PowerStats from "../CharacterCard/powerStats";
 
 const MyTeam = (props) => {
-  const { myTeamList, team } = props;
+  const dispatch = useDispatch();
 
-  const handlerGetMyTeam = () => {
-    props.getMyTeam()
-    }
+  const superheroes = useSelector(store => store.superheroes)
+  const myTeamList = useSelector(store => store.superheroes.myTeamList)
+  const team = useSelector(store => store.superheroes.team)
 
   const [form, setValues] = useState({
       search: '',
@@ -28,22 +29,11 @@ const MyTeam = (props) => {
       weightAverage: '',
       showButton: true,
     });
-
-        let removeHeroes =(props) => {
-          let deleteItem = form.superheroes.map(i => i.id).indexOf(props.target.id)
-          form.superheroesId.splice(deleteItem,1)
-          form.superheroes.splice(deleteItem,1)
-          setValues({
-            ...form,
-            loading: false,
-            superheroesId:form.superheroesId,
-            superheroes:form.superheroes,
-            alignmentError:'',
-            showPowerstats:false,
-            showAverageHW:false,
-            showButton:false
-            });
-        };
+    
+    useEffect(() => {
+      dispatch(fetchMyTeam(myTeamList))
+      return ;
+    }, [])
 
         let sumPowerstats = () => {
           let powerStatsList = form.superheroes.map((pStats) => pStats.powerstats);
@@ -136,32 +126,23 @@ const MyTeam = (props) => {
           });
         };
 
-        useEffect(() => {
-          const timer = setTimeout(() => {
-            sumPowerstats();
-            getIndex();
-          }, 1000);
-          return () => clearTimeout(timer);
-        }, [form.superheroes]);
-
 
   return (
     <div className="container-fluid d-flex justify-content-center align-items-center h-100">
       <>
-      <h2 className="card-title p-3 border border-3 border-dark">My Team</h2>
-      <button className="btn btn-primary" onClick={handlerGetMyTeam}> get heroes</button>
-        {props.myTeamList &&(
+        {team &&(
           <div className="card mb-3 text-dark bg-warning p-4 m-2 w-50 h-75">
+            <h2 className="card-title p-3 border border-3 border-dark">My Team</h2>
             <h3>Type : {form.maxPowerStat}</h3>
             <div className="container d-flex flex-wrap justify-content-evenly p-3 overflow">
             {
-              form.superheroes.map((teamHeroes) => (
+              team.map((teamHeroes) => (
                 <div className="d-flex position-relative col-md-3">
                   <CardComplete
                    heroes={teamHeroes} 
                    key={teamHeroes.id}
                    />
-                  <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={teamHeroes.id} onClick={removeHeroes}> Quit
+                  <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={teamHeroes.id} onClick={() => dispatch(deleteTeamMember(teamHeroes.id))}> Quit
                   </button>
                 </div>
               )) 
@@ -198,17 +179,4 @@ const MyTeam = (props) => {
   );
 }
 
-const mapStateToProps = state => {
-  return {
-    myTeamList: state.myTeamList,
-    searcherList: state.searcherList,
-    memberId : state.memberId,
-    team : state.team,
-  }
-}
-
-const mapDispatchToProps = {
-  getMyTeam,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyTeam);
+export default MyTeam;

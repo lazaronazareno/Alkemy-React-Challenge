@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { connect } from 'react-redux';
-import { addTeamMember, deleteTeamMember } from '../../Actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTeamMember, deleteTeamMember, getMyTeam, searchCharacters } from '../../redux/reducers';
 import api from '../../api';
 import CardComplete from "../CharacterCard/Card";
 import './searcherStyles.scss';
 import PowerStats from "../CharacterCard/powerStats";
 
 const Searcher = (props) => {
-  const { myTeamList, searcherList, memberId } = props;
+  const { myTeamList, loading } = props;
+  const dispatch = useDispatch();
 
-  const handleAddTeamMember = (memberId) => {
-    props.addTeamMember({ memberId });
-    getHeroes(myTeamList)
-    }
-
-  const handleDeleteMember = (memberId) => {
-    props.deleteTeamMember(memberId)
-  }
+  const searchList = useSelector(store => store.superheroes.searchList)
+  console.log(searchList)
+  const error = useSelector(state => state.superheroes.error)
 
   const [form, setValues] = useState({
       search: '',
@@ -42,28 +38,10 @@ const Searcher = (props) => {
           [event.target.name]: event.target.value
         });
       };
-
+        
       let handleSubmit = async event => {
         event.preventDefault();
-        setValues ({...form, loading: true, error:null})
-            try{
-              const data = await api.superhero.search(form.search);
-              setValues({
-                ...form,
-                loading: false,
-                data: data,
-                error: data.error,
-                showPowerstats:false,
-                showAverageHW:false,
-                showButton:false,
-              });
-            } catch (error) {
-              setValues({
-                ...form,
-                loading: false,
-                error: error,
-              });
-            };
+        dispatch(searchCharacters(form.search))
         };
 
        let getHeroes = (props) => {
@@ -287,7 +265,7 @@ const Searcher = (props) => {
         )}
         </>
      {!form.error &&(
-        <div className={`card mb-3 text-dark bg-warning p-4 m-2 w-50 ${form.data ? "h-75" : ""}`}>
+        <div className={`card mb-3 text-dark bg-warning p-4 m-2 w-75 ${(searchList.length > 3) ? "h-75" : ""}`}>
           <form className="d-flex flex-column" onSubmit={handleSubmit}>
             <h2 className="card-title p-3 border border-3 border-dark">Search Heroes</h2>
             <div className="form-floating mb-3">
@@ -303,52 +281,30 @@ const Searcher = (props) => {
             <button className="btn btn-primary btn-lg mb-3" type="submit" >
                 Search
             </button>
-            {form.loading && (
+            {loading && (
               <div className="d-flex justify-content-center m-3">
                   <div className="spinner-border" role="status" />
               </div>
             )}
           </form>
-          { form.data && (
-            <div className="container-fluid d-flex flex-wrap justify-content-evenly overflow">
+            <div className="container-fluid d-flex flex-wrap justify-content-evenly overflow ">
               {
-                form.data.results.map((hero) => (
-                  <div className="d-flex position-relative col-md-3">
+                searchList.map((hero) => (
+                  <div className="position-relative col-md-3">
                     <CardComplete heroes={hero} key={hero.id}/>
-                    <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={hero.id} onClick={() => handleAddTeamMember(hero.id)}> Add
+                    <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={hero.id} onClick={() => dispatch(addTeamMember(hero.id))}> Add
                     </button>
                   </div>
                 ))
               }
             </div>
-            )
-          }
+            {error && (
+                <h1 className="text-danger">Error : {error} </h1>
+            )}
           </div>
-      )}
-      {form.error && (
-        <div className="card mb-3 text-dark bg-warning p-4 m-2 w-50 h-75">
-          <h2>Error : {form.error} </h2>
-          <button className="btn btn-primary btn-lg mb-3" onClick={handleError}>
-            Back
-          </button>
-        </div>
       )}
     </div>
   );
 }
 
-const mapStateToProps = state => {
-  return {
-    myTeamList: state.myTeamList,
-    searcherList: state.searcherList,
-    memberId : state.memberId,
-    team : state.team,
-  }
-}
-
-const mapDispatchToProps = {
-    addTeamMember,
-    deleteTeamMember,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Searcher);
+export default Searcher;
