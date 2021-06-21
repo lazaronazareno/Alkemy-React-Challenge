@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { addTeamMember, deleteTeamMember, getMyTeam, searchCharacters } from '../../redux/reducers';
+import { addTeamMember, searchCharacters, isLoading, fetchMyTeam } from '../../redux/reducers';
 import api from '../../api';
 import CardComplete from "../CharacterCard/Card";
 import './searcherStyles.scss';
-import PowerStats from "../CharacterCard/powerStats";
 
 const Searcher = (props) => {
-  const { myTeamList, loading } = props;
   const dispatch = useDispatch();
 
   const searchList = useSelector(store => store.superheroes.searchList)
+  const myTeamList = useSelector(store => store.superheroes.myTeamList)
   console.log(searchList)
   const error = useSelector(state => state.superheroes.error)
+  const loading = useSelector(state => state.superheroes.loading)
 
   const [form, setValues] = useState({
       search: '',
@@ -41,8 +41,21 @@ const Searcher = (props) => {
         
       let handleSubmit = async event => {
         event.preventDefault();
+        dispatch(isLoading())
         dispatch(searchCharacters(form.search))
         };
+
+      let addHero = (id) => {
+        dispatch(isLoading())
+        dispatch(addTeamMember(id))
+      }
+
+      useEffect(() => {
+        dispatch(isLoading())
+        dispatch(fetchMyTeam(myTeamList))
+        return ;
+  // eslint-disable-next-line
+      }, [myTeamList])
 
        let getHeroes = (props) => {
           setValues({...form, loading: true, superheroesId:form.superheroesId.push(props.target.id)});
@@ -93,27 +106,6 @@ const Searcher = (props) => {
               alignmentError: 'Your team is full'
             });
           }
-        };
-      
-
-        let removeHeroes =(props) => {
-          let deleteItem = form.superheroes.map(i => i.id).indexOf(props.target.id)
-          form.superheroesId.splice(deleteItem,1)
-          form.superheroes.splice(deleteItem,1)
-          setValues({
-            ...form,
-            loading: false,
-            superheroesId:form.superheroesId,
-            superheroes:form.superheroes,
-            alignmentError:'',
-            showPowerstats:false,
-            showAverageHW:false,
-            showButton:false
-            });
-        };
-    
-        let handleError = () => {
-          setValues({...form, error:null, data:undefined});
         };
 
         let sumPowerstats = () => {
@@ -176,96 +168,9 @@ const Searcher = (props) => {
                 });
           }
         };
-
-        let getHeightWeight = () => {
-          let heightTotal = form.superheroes.map((heights) => heights.appearance);
-          let heightsTotal = heightTotal.map((heightsProm) => heightsProm.height[1]);
-          let heightTotalSum = heightsTotal.reduce((total, currentValue) => 
-          (parseInt(total) + parseInt(currentValue)));
-          let heightsAverage = heightTotalSum / heightsTotal.length;
-
-          let weightTotal = form.superheroes.map((weights) => weights.appearance);
-          let weightsTotal = weightTotal.map((weightsProm) => weightsProm.weight[1]);
-          let weightTotalSum = weightsTotal.reduce((total, currentValue) => 
-          (parseInt(total) + parseInt(currentValue)));
-          let weightTotalLength = weightsTotal.length
-          let weightsAverage = weightTotalSum / weightTotalLength;
-
-          setValues({
-            ...form,
-            heightAverage: heightsAverage,
-            weightAverage: weightsAverage,
-            showAverageHW: true,
-          });
-        };
-
-        let onClick = () => {
-          sumPowerstats();
-          setValues({
-            ...form,
-            showPowerstats:true,
-          });
-        };
-
-        useEffect(() => {
-          const timer = setTimeout(() => {
-            sumPowerstats();
-            getIndex();
-          }, 1000);
-          return () => clearTimeout(timer);
-        }, [form.superheroes]);
-
-
   return (
     <div className="container-fluid d-flex justify-content-center align-items-center h-100">
-      <>
-        {form.superheroes.length !== 0 &&(
-          <div className="card mb-3 text-dark bg-warning p-4 m-2 w-50 h-75">
-            <h2 className="card-title p-3 border border-3 border-dark">My Team</h2>
-            <h3>Type : {form.maxPowerStat}</h3>
-            <div className="container d-flex flex-wrap justify-content-evenly p-3 overflow">
-            {
-              form.superheroes.map((teamHeroes) => (
-                <div className="d-flex position-relative col-md-3">
-                  <CardComplete
-                   heroes={teamHeroes} 
-                   key={teamHeroes.id}
-                   />
-                  <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={teamHeroes.id} onClick={removeHeroes}> Quit
-                  </button>
-                </div>
-              )) 
-            }
-            </div>
-            { form.powerStats[0] !== 0 && (
-              <>
-                <button className="btn btn-primary btn-sm mb-1" data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onClick={onClick} >
-                  Calcule Total PowerStats
-                </button>
-                <div className="collapse" id="collapseExample">
-                  <PowerStats powerStats={form.powerStats} superheroes={form.superheroes} />
-                </div>
-                <button className="btn btn-primary btn-sm mb-3"data-bs-toggle="collapse" href="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2" onClick={getHeightWeight} >
-                  Calcule Total Height and Weight
-                </button>
-              </>
-              )
-            }
-            { form.alignmentError && (
-              <h3>{form.alignmentError}</h3>
-            )}
-            {form.heightAverage && form.weightAverage && (
-              <div className="collapse" id="collapseExample2">
-                <span>"Average Height : {form.heightAverage} Cms." </span>
-                <span> "Average Weight : {form.weightAverage} Kgs." </span>
-              </div>
-            )}
-
-          </div>
-        )}
-        </>
-     {!form.error &&(
-        <div className={`card mb-3 text-dark bg-warning p-4 m-2 w-75 ${(searchList.length > 3) ? "h-75" : ""}`}>
+        <div className={`card mb-3 text-dark bg-warning p-4 m-2 w-75 ${(searchList.length > 1) ? "h-75" : ""}`}>
           <form className="d-flex flex-column" onSubmit={handleSubmit}>
             <h2 className="card-title p-3 border border-3 border-dark">Search Heroes</h2>
             <div className="form-floating mb-3">
@@ -281,7 +186,7 @@ const Searcher = (props) => {
             <button className="btn btn-primary btn-lg mb-3" type="submit" >
                 Search
             </button>
-            {loading && (
+            {loading === true && (
               <div className="d-flex justify-content-center m-3">
                   <div className="spinner-border" role="status" />
               </div>
@@ -292,7 +197,7 @@ const Searcher = (props) => {
                 searchList.map((hero) => (
                   <div className="position-relative col-md-3">
                     <CardComplete heroes={hero} key={hero.id}/>
-                    <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={hero.id} onClick={() => dispatch(addTeamMember(hero.id))}> Add
+                    <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={hero.id} onClick={() => addHero(hero.id)}> Add
                     </button>
                   </div>
                 ))
@@ -302,7 +207,6 @@ const Searcher = (props) => {
                 <h1 className="text-danger">Error : {error} </h1>
             )}
           </div>
-      )}
     </div>
   );
 }

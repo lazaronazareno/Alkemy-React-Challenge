@@ -13,9 +13,11 @@ function App() {
       <>
       { !token && (
         <div className="App bg-danger">
+          <BrowserRouter>
           <Layout>
             <Login setToken={setToken} />
           </Layout>
+          </BrowserRouter>
         </div>
         )}
         { token && (

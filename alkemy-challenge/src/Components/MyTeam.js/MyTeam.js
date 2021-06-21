@@ -1,16 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteTeamMember, fetchMyTeam } from '../../redux/reducers';
-import api from '../../api';
+import { deleteTeamMember } from '../../redux/reducers';
 import CardComplete from "../CharacterCard/Card";
 import PowerStats from "../CharacterCard/powerStats";
 
 const MyTeam = (props) => {
   const dispatch = useDispatch();
-
-  const superheroes = useSelector(store => store.superheroes)
-  const myTeamList = useSelector(store => store.superheroes.myTeamList)
   const team = useSelector(store => store.superheroes.team)
+  const loading = useSelector(state => state.superheroes.loading)
 
   const [form, setValues] = useState({
       search: '',
@@ -29,11 +26,6 @@ const MyTeam = (props) => {
       weightAverage: '',
       showButton: true,
     });
-    
-    useEffect(() => {
-      dispatch(fetchMyTeam(myTeamList))
-      return ;
-    }, [])
 
         let sumPowerstats = () => {
           let powerStatsList = form.superheroes.map((pStats) => pStats.powerstats);
@@ -129,52 +121,52 @@ const MyTeam = (props) => {
 
   return (
     <div className="container-fluid d-flex justify-content-center align-items-center h-100">
-      <>
-        {team &&(
-          <div className="card mb-3 text-dark bg-warning p-4 m-2 w-50 h-75">
-            <h2 className="card-title p-3 border border-3 border-dark">My Team</h2>
-            <h3>Type : {form.maxPowerStat}</h3>
-            <div className="container d-flex flex-wrap justify-content-evenly p-3 overflow">
-            {
-              team.map((teamHeroes) => (
-                <div className="d-flex position-relative col-md-3">
-                  <CardComplete
-                   heroes={teamHeroes} 
-                   key={teamHeroes.id}
-                   />
-                  <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={teamHeroes.id} onClick={() => dispatch(deleteTeamMember(teamHeroes.id))}> Quit
-                  </button>
-                </div>
-              )) 
-            }
-            </div>
-            { form.powerStats[0] !== 0 && (
-              <>
-                <button className="btn btn-primary btn-sm mb-1" data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onClick={onClick} >
-                  Calcule Total PowerStats
-                </button>
-                <div className="collapse" id="collapseExample">
-                  <PowerStats powerStats={form.powerStats} superheroes={form.superheroes} />
-                </div>
-                <button className="btn btn-primary btn-sm mb-3"data-bs-toggle="collapse" href="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2" onClick={getHeightWeight} >
-                  Calcule Total Height and Weight
-                </button>
-              </>
-              )
-            }
-            { form.alignmentError && (
-              <h3>{form.alignmentError}</h3>
-            )}
-            {form.heightAverage && form.weightAverage && (
-              <div className="collapse" id="collapseExample2">
-                <span>"Average Height : {form.heightAverage} Cms." </span>
-                <span> "Average Weight : {form.weightAverage} Kgs." </span>
-              </div>
-            )}
-
+      <div className={`card mb-3 d-flex flex-column text-dark bg-warning p-4 m-2 w-75 ${(team.length >= 1) ? "h-75" : ""}`}>
+        <h2 className="card-title p-3 border border-3 border-dark">My Team</h2>
+        <h3>Type : {form.maxPowerStat}</h3>
+        {loading === true && (
+          <div className="d-flex justify-content-center m-3">
+              <div className="spinner-border" role="status" />
           </div>
         )}
-        </>
+        <div className="container d-flex flex-wrap justify-content-evenly overflow">
+          {
+            team.map((teamHeroes) => (
+              <div className={`d-flex position-relative col-md-3 ${(team.length > 4) ? "col-md-1" : ""}`} key={teamHeroes.id}>
+                <CardComplete
+                 heroes={teamHeroes} 
+                 key={teamHeroes.id}
+                 />
+                <button type="button" className="btn btn-danger m-1 position-absolute top-0 start-0" id={teamHeroes.id} onClick={() => dispatch(deleteTeamMember(teamHeroes.id))}> Quit
+                </button>
+              </div>
+            )) 
+          }
+        </div>
+        { form.powerStats[0] === 0 && (
+          <>
+            <button className="btn btn-primary btn-sm mb-1" data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onClick={onClick} >
+              Calcule Total PowerStats
+            </button>
+            <div className="collapse" id="collapseExample">
+              <PowerStats powerStats={form.powerStats} superheroes={form.superheroes} />
+            </div>
+            <button className="btn btn-primary btn-sm mb-3"data-bs-toggle="collapse" href="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2" onClick={getHeightWeight} >
+              Calcule Total Height and Weight
+            </button>
+          </>
+          )
+        }
+        { form.alignmentError && (
+          <h3>{form.alignmentError}</h3>
+        )}
+        {form.heightAverage && form.weightAverage && (
+          <div className="collapse" id="collapseExample2">
+            <span>"Average Height : {form.heightAverage} Cms." </span>
+            <span> "Average Weight : {form.weightAverage} Kgs." </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

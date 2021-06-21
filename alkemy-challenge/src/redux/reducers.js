@@ -3,9 +3,8 @@ import api from '../api'
 const initialState = {
     "myTeamList":[],
     "searchList":[],
-    "searchError" : undefined,
-    "memberId" : [],
     "team" : [],
+    "searchError" : undefined,
     "loading" : false,
     "error": null,
 
@@ -16,6 +15,7 @@ const DELETE_TEAMMEMBER = 'DELETE_TEAMMEMBER';
 const GET_MYTEAM = 'GET_MYTEAM';
 const SEARCH_CHARACTERS = 'SEARCH_CHARACTERS';
 const FETCH_MYTEAM = 'FETCH_MYTEAM';
+const IS_LOADING = 'IS_LOADING';
 
 //reducer
 
@@ -23,15 +23,23 @@ export default function reducer (state = initialState, action) {
     console.log(action)
     switch (action.type) {
         case ADD_TEAMMEMBER :
-            return {
-                ...state,
-                myTeamList : state.myTeamList.concat(action.payload),
-                loading: !state.loading
+            if (state.myTeamList.length <= 5){
+                return {
+                    ...state,
+                    myTeamList : (state.myTeamList.concat(action.payload)).filter((v,i,a) => a.indexOf(v) === i),
+                    loading: false
+                }
+            }else {
+                return {
+                    ...state,
+                    loading:false,
+                    error: "Your team is full"
+                }
             }
         case DELETE_TEAMMEMBER :
             return {
                 ...state,
-                myTeamList: state.myTeamList.filter(items => items.memberId !== action.payload),
+                myTeamList: state.myTeamList.filter(items => items !== action.payload),
                 team: state.team.filter(items => items.id !== action.payload)
             }
         case GET_MYTEAM :
@@ -44,19 +52,27 @@ export default function reducer (state = initialState, action) {
                 return {
                     ...state,
                     error: action.payload.error,
-                    searchList : []
+                    searchList : [],
+                    loading: false
                 }
             }else {
                 return {
                     ...state,
                     searchList : action.payload.results,
                     error: null,
+                    loading: false
                 }
             }
         case FETCH_MYTEAM :
             return {
                 ...state,
-                team : action.payload
+                team : action.payload,
+                loading : false
+            }
+        case IS_LOADING :
+            return {
+                ...state,
+                loading : true
             }
         default: 
           return state;
@@ -90,12 +106,12 @@ export const searchCharacters = (form) => async (dispatch, getState) => {
         const data = await api.superhero.search(form)
         dispatch({
             type: SEARCH_CHARACTERS,
-            payload : data
+            payload : data,
         })
       } catch (error) {
         dispatch({
             type: SEARCH_CHARACTERS,
-            payload : error
+            payload : error,
         })
       }
 }
@@ -107,9 +123,18 @@ export const fetchMyTeam = (myTeamList) => async (dispatch, getState) => {
     })
     Promise.all(promises).then((responses)=> {
     const superheroes = responses.map((response) => response)
-    dispatch({
-        type: FETCH_MYTEAM,
-        payload : superheroes
+    if (superheroes.length <= 6) {
+        dispatch({
+            type: FETCH_MYTEAM,
+            payload : superheroes,
+        })
+    }
     })
+}
+
+export const isLoading = () => (dispatch, getState) => {
+    dispatch({
+        type: IS_LOADING,
+        payload : true
     })
 }

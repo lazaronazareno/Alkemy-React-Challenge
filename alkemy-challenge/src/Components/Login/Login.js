@@ -5,38 +5,38 @@ import './formStyles.scss';
 
 
 function Login ({ setToken }) {
-    const [form, setValues] = useState({
-        email: '',
-        password: '',
-        loading:false,
-        error:null,
+  const [form, setValues] = useState({
+      email: '',
+      password: '',
+      loading:false,
+      error:null,
+    });
+  
+    const handleInput = event => {
+      setValues({
+        ...form,
+        [event.target.name]: event.target.value
       });
-    
-      const handleInput = event => {
+    };
+
+    const handleSubmit = async event => {
+      event.preventDefault();
+      setValues ({loading: true, error:null})
+      const token = await loginApi.login.accept(form);
+      setToken(token);
+      setValues({
+        loading: false,
+        error: token.error
+      });
+      if (token.error){
+        document.getElementById("form").reset(); 
         setValues({
           ...form,
-          [event.target.name]: event.target.value
-        });
-      };
-
-      const handleSubmit = async event => {
-        event.preventDefault();
-        setValues ({loading: true, error:null})
-        const token = await loginApi.login.accept(form);
-        setToken(token);
-        setValues({
           loading: false,
-          error: token.error
+          error: token.error,
         });
-        if (token.error){
-          document.getElementById("form").reset(); 
-          setValues({
-            ...form,
-            loading: false,
-            error: token.error,
-          });
-        }
-      };
+      }
+    };
 
     useEffect(() => {
       if(form.error) {
@@ -45,6 +45,7 @@ function Login ({ setToken }) {
       return () => {
         setValues({...form,loading:false})
       }
+      // eslint-disable-next-line
     }, [])
 
 
