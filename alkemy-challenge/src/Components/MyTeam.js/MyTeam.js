@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteTeamMember } from '../../redux/reducers';
+import { deleteTeamMember, isLoading, getPowerStats, sumPowerStats } from '../../redux/reducers';
 import CardComplete from "../CharacterCard/Card";
 import PowerStats from "../CharacterCard/powerStats";
 
@@ -8,6 +8,8 @@ const MyTeam = (props) => {
   const dispatch = useDispatch();
   const team = useSelector(store => store.superheroes.team)
   const loading = useSelector(state => state.superheroes.loading)
+  const powerStats = useSelector(state => state.superheroes.powerStats)
+  const totalPowerStats = useSelector(state => state.superheroes.sumPowerStats)
 
   const [form, setValues] = useState({
       search: '',
@@ -26,27 +28,13 @@ const MyTeam = (props) => {
       weightAverage: '',
       showButton: true,
     });
-
-        let sumPowerstats = () => {
-          let powerStatsList = form.superheroes.map((pStats) => pStats.powerstats);
-          let attributesList = powerStatsList.map(atr => atr);
-          let attributesSumIntelligence = attributesList.reduce((total, currentValue) => 
-          total + parseInt(currentValue.intelligence),0);
-          let attributesSumStrength = attributesList.reduce((total, currentValue) => 
-          total + parseInt(currentValue.strength),0);
-          let attributesSumSpeed = attributesList.reduce((total, currentValue) => 
-          total + parseInt(currentValue.speed),0);
-          let attributesSumDurability = attributesList.reduce((total, currentValue) => 
-          total + parseInt(currentValue.durability),0);
-          let attributesSumPower = attributesList.reduce((total, currentValue) => 
-          total + parseInt(currentValue.power),0);
-          let attributesSumCombat = attributesList.reduce((total, currentValue) => 
-          total + parseInt(currentValue.combat),0);
-          const sumAttributes = [];
-          sumAttributes.push(attributesSumIntelligence,attributesSumStrength, attributesSumSpeed, attributesSumDurability, attributesSumPower, attributesSumCombat);
-          setValues({...form, powerStats:form.powerStats = sumAttributes})
-          getIndex();
-        };
+    
+    useEffect(() => {
+      dispatch(isLoading())
+      dispatch(getPowerStats(team))
+      return ;
+// eslint-disable-next-line
+    }, [])
 
         let getIndex = () => {
           let maxAttribute = Math.max(...form.powerStats);
@@ -110,15 +98,6 @@ const MyTeam = (props) => {
           });
         };
 
-        let onClick = () => {
-          sumPowerstats();
-          setValues({
-            ...form,
-            showPowerstats:true,
-          });
-        };
-
-
   return (
     <div className="container-fluid d-flex justify-content-center align-items-center h-100">
       <div className={`card mb-3 d-flex flex-column text-dark bg-warning p-4 m-2 w-75 ${(team.length >= 1) ? "h-75" : ""}`}>
@@ -143,20 +122,18 @@ const MyTeam = (props) => {
             )) 
           }
         </div>
-        { form.powerStats[0] === 0 && (
-          <>
-            <button className="btn btn-primary btn-sm mb-1" data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onClick={onClick} >
-              Calcule Total PowerStats
+            <button className="btn btn-primary btn-sm mb-1" data-bs-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample" onClick={() => dispatch(sumPowerStats(powerStats))}>
+             Calcule Total PowerStats
             </button>
             <div className="collapse" id="collapseExample">
-              <PowerStats powerStats={form.powerStats} superheroes={form.superheroes} />
+        { totalPowerStats.length>0 && (
+          <PowerStats powerstats={totalPowerStats} superheroes={team}/>
+        )
+        }
             </div>
             <button className="btn btn-primary btn-sm mb-3"data-bs-toggle="collapse" href="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2" onClick={getHeightWeight} >
               Calcule Total Height and Weight
-            </button>
-          </>
-          )
-        }
+            </button>          
         { form.alignmentError && (
           <h3>{form.alignmentError}</h3>
         )}

@@ -10,7 +10,7 @@ const Searcher = (props) => {
 
   const searchList = useSelector(store => store.superheroes.searchList)
   const myTeamList = useSelector(store => store.superheroes.myTeamList)
-  console.log(searchList)
+  const team = useSelector(store => store.superheroes.team)
   const error = useSelector(state => state.superheroes.error)
   const loading = useSelector(state => state.superheroes.loading)
 
