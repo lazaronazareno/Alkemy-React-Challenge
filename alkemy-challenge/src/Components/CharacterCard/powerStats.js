@@ -1,7 +1,6 @@
 import React from 'react'
 
 function Powerstats(props) {
-  console.log(props)
     return (
         <div className="container d-flex responsive-column">
                 <span className="text-wrap text-danger">Intelligence : {props.powerstats[0]}</span>

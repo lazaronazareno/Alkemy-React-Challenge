@@ -14,29 +14,29 @@ function App() {
       { !token && (
         <div className="App bg-danger">
           <BrowserRouter>
-          <Layout>
+          <Layout button={null}>
             <Login setToken={setToken} />
           </Layout>
           </BrowserRouter>
         </div>
-        )}
-        { token && (
-          <div className="App bg-danger">
-            <BrowserRouter>
-            <Layout>
-              <Switch>
-                <Route exact path={["/", "/search"]}>
-                  <Searcher/>
-                </Route>
-                <Route exact path="/team">
-                  <MyTeam/>
-                </Route>
-                <Route component={NotFound}/>
-              </Switch>
-            </Layout>
-           </BrowserRouter>
-          </div>
-        )}
+      )}
+      { token && (
+        <div className="App bg-danger">
+          <BrowserRouter>
+          <Layout button={true}>
+            <Switch>
+              <Route exact path={["/", "/search"]}>
+                <Searcher/>
+              </Route>
+              <Route exact path="/team">
+                <MyTeam/>
+              </Route>
+              <Route component={NotFound}/>
+            </Switch>
+          </Layout>
+         </BrowserRouter>
+        </div>
+      )}
     </>
     );
   }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../Searcher/searcherStyles.scss';
 
 function NotFound() {
     return (
