@@ -6,7 +6,7 @@ import PowerStats from "../CharacterCard/powerStats";
 
 const MyTeam = (props) => {
   const dispatch = useDispatch();
-  const team = useSelector(store => store.superheroes.team)
+  const team = useSelector(store => store.superheroes.myTeamList)
   const loading = useSelector(state => state.superheroes.loading)
   const error = useSelector(state => state.superheroes.error)
   const powerStats = useSelector(state => state.superheroes.powerStats)

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { addTeamMember, searchCharacters, isLoading, fetchMyTeam } from '../../redux/reducers';
+import { addTeamMember, searchCharacters, isLoading, getGoodBadList } from '../../redux/reducers';
 import CardComplete from "../CharacterCard/Card";
 import './searcherStyles.scss';
 
@@ -34,10 +34,10 @@ const Searcher = (props) => {
     dispatch(addTeamMember(id))
   }
 
-    useEffect(() => {
-      dispatch(isLoading())
-      dispatch(fetchMyTeam(myTeamList))
-      return ;
+  useEffect(() => {
+    dispatch(isLoading())
+    dispatch(getGoodBadList(myTeamList))
+    return ;
 // eslint-disable-next-line
     }, [myTeamList])
 

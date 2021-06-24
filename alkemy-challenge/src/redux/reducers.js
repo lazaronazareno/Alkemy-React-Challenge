@@ -3,7 +3,6 @@ import api from '../superheroesApi'
 const initialState = {
     "myTeamList":[],
     "searchList":[],
-    "team" : [],
     "loading" : false,
     "error": null,
     "powerStats" : [],
@@ -17,34 +16,34 @@ const initialState = {
 const ADD_TEAMMEMBER = 'ADD_TEAMMEMBER';
 const DELETE_TEAMMEMBER = 'DELETE_TEAMMEMBER';
 const SEARCH_CHARACTERS = 'SEARCH_CHARACTERS';
-const FETCH_MYTEAM = 'FETCH_MYTEAM';
 const IS_LOADING = 'IS_LOADING';
 const GET_POWERSTATS = 'GET_POWERSTATS';
 const SUM_POWERSTATS = 'SUM_POWERSTATS';
 const GET_WEIGHTHEIGHT = 'GET_WEIGHTHEIGHT';
+const SET_GOODBADLIST = 'SET_GOODBADLIST';
 
 export default function reducer (state = initialState, action) {
     console.log(action)
     switch (action.type) {
         case ADD_TEAMMEMBER :
             if (state.myTeamList.length <= 5){
-                if (state.myTeamGood.length <= 2 && state.myTeamBad.length <=2){
+                if (state.myTeamGood.length <= 2 && state.myTeamBad.length <= 2){
                     return {
                         ...state,
-                        myTeamList : (state.myTeamList.concat(action.payload)).filter((v,i,a) => a.indexOf(v) === i),
+                        myTeamList : state.myTeamList.concat(state.searchList.filter(a => a.id.indexOf(action.payload) !== -1)),
                         loading: false,
                     }
                 } else if (state.myTeamGood.length === 3 && state.myTeamBad.length < 3){
                     return {
                         ...state,
-                        myTeamList : (state.myTeamList.concat(action.payload)).filter((v,i,a) => a.indexOf(v) === i),
+                        myTeamList : state.myTeamList.concat(state.searchList.filter(a => a.id.indexOf(action.payload) !== -1)),
                         loading: false,
                         error : 'You already have 3 members of the same alignment "good", Adding "bad'
                     }
                 } else if (state.myTeamGood.length < 3 && state.myTeamBad.length === 3){
                     return {
                         ...state,
-                        myTeamList : (state.myTeamList.concat(action.payload)).filter((v,i,a) => a.indexOf(v) === i),
+                        myTeamList : state.myTeamList.concat(state.searchList.filter(a => a.id.indexOf(action.payload) !== -1)),
                         loading: false,
                         error : 'You already have 3 members of the same alignment "bad", Adding "good'
                     }
@@ -65,9 +64,15 @@ export default function reducer (state = initialState, action) {
         case DELETE_TEAMMEMBER :
             return {
                 ...state,
-                myTeamList: state.myTeamList.filter(items => items !== action.payload),
-                team: state.team.filter(items => items.id !== action.payload),
+                myTeamList: state.myTeamList.filter(items => items.id !== action.payload),
                 error: null
+            }
+        case SET_GOODBADLIST :
+            return {
+                ...state,
+                myTeamGood :  state.myTeamList.filter(good => good.biography.alignment.indexOf('good') !== -1),
+                myTeamBad :  state.myTeamList.filter(bad => bad.biography.alignment.indexOf('bad') !== -1),
+                loading: false
             }
         case SEARCH_CHARACTERS :
             if(action.payload.response === 'error') {
@@ -85,19 +90,10 @@ export default function reducer (state = initialState, action) {
                     loading: false
                 }
             }
-        case FETCH_MYTEAM :
-                return {
-                    ...state,
-                    team : action.payload,
-                    loading : false,
-                    myTeamGood :  action.payload.filter(good => good.biography.alignment.indexOf('good') !== -1),
-                    myTeamBad :  action.payload.filter(bad => bad.biography.alignment.indexOf('bad') !== -1),
-                }
         case IS_LOADING :
             return {
                 ...state,
                 loading : true,
-                error: null,
             }
         case GET_POWERSTATS :
             return {
@@ -122,10 +118,10 @@ export default function reducer (state = initialState, action) {
     }
 }
 
-export const addTeamMember = (memberId) => (dispatch, getState) => {
+export const addTeamMember = (member) => (dispatch, getState) => {
     dispatch({
         type: ADD_TEAMMEMBER,
-        payload: memberId
+        payload: member
     })
 }
 
@@ -133,6 +129,13 @@ export const deleteTeamMember = (memberId) => (dispatch, getState) =>{
     dispatch({
         type: DELETE_TEAMMEMBER,
         payload : memberId
+    })
+}
+
+export const getGoodBadList = (myTeamList) => (dispatch, getState)=> {
+    dispatch({
+        type: SET_GOODBADLIST,
+        dispatch : myTeamList
     })
 }
 
@@ -149,22 +152,6 @@ export const searchCharacters = (form) => async (dispatch, getState) => {
             payload : error,
         })
       }
-}
-
-export const fetchMyTeam = (myTeamList) => async (dispatch, getState) => {
-    const promises = []
-    myTeamList.forEach((id) => {
-    promises.push(api.superhero.addHero(id))
-    })
-    Promise.all(promises).then((responses)=> {
-    const superheroes = responses.map((response) => response)
-    if (superheroes.length <= 6) {
-        dispatch({
-            type: FETCH_MYTEAM,
-            payload : superheroes,
-        })
-    }
-    })
 }
 
 export const isLoading = () => (dispatch, getState) => {
