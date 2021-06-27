@@ -6,9 +6,8 @@ import PowerStats from "../CharacterCard/powerStats";
 
 const MyTeam = (props) => {
   const dispatch = useDispatch();
-  const team = useSelector(store => store.superheroes.myTeamList)
+  const team = useSelector(store => store.superheroes.team)
   const loading = useSelector(state => state.superheroes.loading)
-  const error = useSelector(state => state.superheroes.error)
   const powerStats = useSelector(state => state.superheroes.powerStats)
   const totalPowerStats = useSelector(state => state.superheroes.sumPowerStats)
   const maxPowerStat = useSelector(state => state.superheroes.maxPowerStat)
@@ -19,7 +18,7 @@ const MyTeam = (props) => {
       dispatch(getPowerStats(team))
       return ;
 // eslint-disable-next-line
-    }, [])
+    }, [team])
 
   return (
     <div className="container-fluid d-flex justify-content-center align-items-center h-100">
@@ -64,9 +63,6 @@ const MyTeam = (props) => {
               <span> "Average Weight : {heightWeight[1]} Kgs." </span>
             </div>
           </>
-        )}
-        { error && (
-          <h3>Error : {error}</h3>
         )}
       </div>
     </div>

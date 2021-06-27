@@ -2,3 +2,10 @@
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
+@media (min-width : 600px) {
+    .media {
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+}
