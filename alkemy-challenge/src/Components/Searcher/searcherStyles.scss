@@ -3,7 +3,7 @@
     overflow-y: scroll;
 }
 
-@media (min-width : 600px) {
+@media (max-width : 600px) {
     .media {
         overflow-x: hidden;
         overflow-y: scroll;
